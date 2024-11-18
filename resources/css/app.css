@@ -5,3 +5,156 @@
 [x-cloak] {
     display: none;
 }
+
+.altura {
+    height: calc(100vh - 100px);
+}
+
+.maxima-altura {
+    max-height: calc(100vh - 100px);
+}
+
+/* mañana */
+.mañana-niños {
+    background: rgb(252,252,244);
+    background: linear-gradient(90deg, rgba(252,252,244,1) 0%, rgba(232,80,91,1) 46%, rgba(5,125,175,1) 97%);
+}
+.mañana-jovenes {
+    background: rgb(252,252,244);
+    background: linear-gradient(90deg, rgba(252,252,244,1) 0%, rgba(80,221,232,1) 46%, rgba(0,103,15,1) 97%);
+}
+.mañana-adultos {
+    background: rgb(213,223,231);
+    background: linear-gradient(90deg, rgba(213,223,231,1) 0%, rgba(173,203,223,1) 46%, rgba(194,186,89,1) 97%);
+}
+.mañana {
+    background: rgb(213,223,231);
+    background: linear-gradient(90deg, rgba(213,223,231,1) 0%, rgba(173,203,223,1) 46%, rgba(194,186,89,1) 97%);
+}
+
+.contornos-mañana {
+    --tw-border-opacity: 1;
+    border-color: rgb(99 99 99 / var(--tw-border-opacity));
+}
+
+.textos-mañana {
+    color: #262625;
+}
+
+.textos-mañana:hover {
+    color: #6e6e6e;
+}
+
+.titulo-mañana {
+    color: rgb(189, 176, 110);
+}
+
+.fondo-mañana {
+    background: #c2ba59;
+}
+
+.iconos-mañana {
+    color: rgb(193, 179, 85);
+}
+
+.iconos-mañana:hover {
+    --tw-bg-opacity: 1;
+    background-color: #6c6510;
+}
+
+/* tarde */
+.tarde-niños {
+    background: rgb(150,224,255);
+    background: linear-gradient(90deg, rgba(150,224,255,1) 0%, rgba(218,17,33,1) 46%, rgba(41,52,205,1) 97%);
+}
+.tarde-jovenes {
+    background: rgb(41,179,165);
+    background: linear-gradient(90deg, rgba(41,179,165,1) 0%, rgba(21,116,59,1) 46%, rgba(173,82,7,1) 97%);
+}
+.tarde-adultos {
+    background: rgb(233,230,195);
+    background: linear-gradient(90deg, rgba(233,230,195,1) 0%, rgba(147,99,15,1) 46%, rgba(61,57,49,1) 97%);
+}
+.tarde {
+    background: rgb(233,230,195);
+    background: linear-gradient(90deg, rgba(233,230,195,1) 0%, rgba(147,99,15,1) 46%, rgba(61,57,49,1) 97%);
+}
+
+.contornos-tarde {
+    --tw-border-opacity: 1;
+    border-color: rgb(69 46 31 / var(--tw-border-opacity));
+}
+
+.textos-tarde {
+    color: #262625;
+}
+
+.textos-tarde:hover {
+    color: #8c4713;
+}
+
+.titulo-tarde {
+    color: rgb(158, 87, 22);
+}
+
+.fondo-tarde {
+    background: #93630f;
+}
+
+.iconos-tarde {
+    color: rgb(103, 64, 25);
+}
+
+.iconos-tarde:hover {
+    --tw-bg-opacity: 1;
+    background-color: #967545;
+}
+
+
+/* noche */
+.noche-niños {
+    background: rgb(138,1,1);
+    background: linear-gradient(90deg, rgba(138,1,1,1) 0%, rgba(40,83,161,1) 46%, rgba(65,0,69,1) 97%);
+}
+.noche-jovenes {
+    background: rgb(33,15,88);
+    background: linear-gradient(90deg, rgba(33,15,88,1) 0%, rgba(19,108,108,1) 46%, rgba(115,78,29,1) 97%);
+}
+.noche-adultos {
+    background: rgb(6,86,153);
+    background: linear-gradient(90deg, rgba(6,86,153,1) 0%, rgba(18,29,99,1) 36%, rgba(0,3,25,1) 97%);
+}
+.noche {
+    background: rgb(6,86,153);
+    background: linear-gradient(90deg, rgba(6,86,153,1) 0%, rgba(18,29,99,1) 36%, rgba(0,3,25,1) 97%);
+}
+
+.contornos-noche {
+    --tw-border-opacity: 1;
+    border-color: rgb(72 143 176/ var(--tw-border-opacity));
+}
+
+.textos-noche {
+    color: #f2f2ee;
+}
+
+.textos-noche:hover {
+    color: #80bae4;
+}
+
+.titulo-noche {
+    color: rgb(118, 164, 205);
+}
+
+.iconos-noche {
+    color: rgb(44, 47, 103);
+}
+
+.iconos-noche:hover {
+    --tw-bg-opacity: 1;
+    background-color: #346f91;
+}
+
+.fondo-noche {
+    background: #80bae4;
+}
