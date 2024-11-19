@@ -26,6 +26,8 @@ return new class extends Migration
                     ->after('two_factor_recovery_codes')
                     ->nullable();
             }
+
+            $table->foreign('rol_id')->references('id')->on('rol');
         });
     }
 

@@ -51,7 +51,7 @@ function handleImageError() {
         </div>
 
         <p :class="['text-right font-bold text-sm mr-4 mb-2', $page.props.styles.textos]">
-            Visitas: 0
+            Visitas: {{ $page.props.conteoPagina }}
         </p>
     </div>
 </template>

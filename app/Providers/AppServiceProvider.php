@@ -2,9 +2,9 @@
 
 namespace App\Providers;
 
+use App\Models\ContadorPagina;
 use Carbon\Carbon;
 use Inertia\Inertia;
-use Session;
 
 use Illuminate\Support\ServiceProvider;
 
@@ -55,12 +55,9 @@ class AppServiceProvider extends ServiceProvider
                 'iconos' => 'iconos-tarde',
             ];
         }
-        if(Session::get('tema') == null) {
-            Session::put('tema', 'adultos');
-        }
         Inertia::share([
             'styles' => $styles,
-            'tema' => Session::get('tema')
+            //'conteoPagina' => ContadorPagina::contar()
         ]);
     }
 }

@@ -33,6 +33,7 @@ class User extends Authenticatable
         'email',
         'password',
         'current_team_id',
+        'rol_id'
     ];
 
     public function setPasswordAttribute($value){
