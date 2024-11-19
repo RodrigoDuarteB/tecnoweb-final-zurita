@@ -1,5 +1,5 @@
 <template>
-    <div :class="['flex h-screen w-full', $page.props.styles.background]">
+    <div :class="['flex h-screen w-full', `${$page.props.styles.background}-${tema}`]">
         <Menu />
 
         <div class="flex flex-col flex-1 w-full">
@@ -17,6 +17,9 @@
 <script setup>
     import Menu from '@/Components/Menu.vue';
     import Header from '@/Components/Header.vue';
+    import { usePage } from '@inertiajs/vue3';
+    console.log(usePage().props);
+    const tema = localStorage.getItem('tema') ?? 'adultos'
 </script>
 
 <style lang="scss" scoped>

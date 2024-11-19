@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Models\User;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ConfiguracionController;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -24,4 +25,5 @@ Route::middleware([
         return Inertia::render('Dashboard');
     })->name('dashboard');
     Route::resource('dashboard/user', UserController::class);
+    Route::resource('configuracion', ConfiguracionController::class);
 });

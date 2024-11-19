@@ -1,8 +1,5 @@
 <script setup>
-import { Head, Link, useForm } from '@inertiajs/vue3';
-import AuthenticationCard from '@/Components/AuthenticationCard.vue';
-import AuthenticationCardLogo from '@/Components/AuthenticationCardLogo.vue';
-import Checkbox from '@/Components/Checkbox.vue';
+import { useForm } from '@inertiajs/vue3';
 import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
@@ -30,63 +27,6 @@ const submit = () => {
 </script>
 
 <template>
-    <!-- Head title="Log in" />
-
-    <AuthenticationCard>
-        <template #logo>
-            <AuthenticationCardLogo />
-        </template>
-
-        <div v-if="status" class="mb-4 font-medium text-sm text-green-600">
-            {{ status }}
-        </div>
-
-        <form @submit.prevent="submit">
-            <div>
-                <InputLabel for="email" value="Email" />
-                <TextInput
-                    id="email"
-                    v-model="form.email"
-                    type="email"
-                    class="mt-1 block w-full"
-                    required
-                    autofocus
-                    autocomplete="username"
-                />
-                <InputError class="mt-2" :message="form.errors.email" />
-            </div>
-
-            <div class="mt-4">
-                <InputLabel for="password" value="Password" />
-                <TextInput
-                    id="password"
-                    v-model="form.password"
-                    type="password"
-                    class="mt-1 block w-full"
-                    required
-                    autocomplete="current-password"
-                />
-                <InputError class="mt-2" :message="form.errors.password" />
-            </div>
-
-            <div class="block mt-4">
-                <label class="flex items-center">
-                    <Checkbox v-model:checked="form.remember" name="remember" />
-                    <span class="ms-2 text-sm text-gray-600">Remember me</span>
-                </label>
-            </div>
-
-            <div class="flex items-center justify-end mt-4">
-                <Link v-if="canResetPassword" :href="route('password.request')" class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                    Forgot your password?
-                </Link>
-
-                <PrimaryButton class="ms-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                    Log in
-                </PrimaryButton>
-            </div>
-        </form>
-    </AuthenticationCard> -->
     <div :class="['h-screen overflow-hidden flex items-center justify-center', $page.props.styles.background]">
         <section class="min-h-screen flex items-stretch text-white ">
             <div class="lg:flex w-1/2 hidden bg-gray-500 bg-no-repeat bg-cover relative items-center imagen-login">
@@ -103,22 +43,13 @@ const submit = () => {
                     <div class="absolute bg-black opacity-60 inset-0 z-0"></div>
                 </div>
                 <div class="w-full py-6 z-20">
-                    <p class="text-gray-100">
+                    <p class="text-gray-100 font-semibold text-2xl mb-10">
                         Iniciar Sesión
                     </p>
 
                     <form @submit.prevent="submit" class="sm:w-2/3 w-full px-4 lg:px-0 mx-auto">
-                        <!-- <div class="pb-2 pt-4">
-                            <input type="email" name="email" id="email" placeholder="Email" class="block w-full p-4 text-lg rounded-sm bg-black">
-                        </div>
-                        <div class="pb-2 pt-4">
-                            <input class="block w-full p-4 text-lg rounded-sm bg-black" type="password" name="password" id="password" placeholder="Password">
-                        </div>
-                        <div class="px-4 pb-2 pt-4">
-                            <button class="uppercase block w-full p-4 text-lg rounded-full bg-indigo-500 hover:bg-indigo-600 focus:outline-none">Iniciar Sesion</button>
-                        </div> -->
                         <div>
-                            <InputLabel for="email" value="Email" />
+                            <InputLabel for="email" value="Email" class="text-white" />
                             <TextInput
                                 id="email"
                                 v-model="form.email"
@@ -132,7 +63,7 @@ const submit = () => {
                         </div>
 
                         <div class="mt-4">
-                            <InputLabel for="password" value="Password" />
+                            <InputLabel for="password" value="Password" class="text-white" />
                             <TextInput
                                 id="password"
                                 v-model="form.password"
@@ -144,7 +75,7 @@ const submit = () => {
                             <InputError class="mt-2" :message="form.errors.password" />
                         </div>
 
-                        <PrimaryButton class="mt-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
+                        <PrimaryButton class="mt-4 bg-blue-500" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
                             Log in
                         </PrimaryButton>
 
