@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\MenuStoreRequest;
 use App\Models\Menu;
 use DB;
+use Exception;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -34,14 +35,20 @@ class MenuController extends Controller
     {
         //dd($request->all());
         DB::beginTransaction();
-        $menu = Menu::create([
-            'nombre' => $request->nombre,
-            'descripcion' => $request->descripcion
-        ]);
+        try {
+            $menu = Menu::create([
+                'nombre' => $request->nombre,
+                'descripcion' => $request->descripcion
+            ]);
 
-        $menu->acciones()->createMany($request->acciones);
-        DB::commit();
-        return redirect()->route('menu.index');
+            $menu->acciones()->createMany($request->acciones);
+            DB::commit();
+            return redirect()->route('menu.index');
+        } catch (Exception $e) {
+            DB::rollBack();
+            return redirect()->route('menu.index')
+                ->with('error', 'Hubo un error al guardar el menu: '. $e->getMessage());
+        }
     }
 
     /**

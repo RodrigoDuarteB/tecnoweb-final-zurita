@@ -64,17 +64,17 @@ class User extends Authenticatable
     ];
 
     public function getPermisosAttribute(){
-        $permisos = DB::table('permisos')
-        ->join('acciones', 'permisos.accion_id', '=', 'acciones.id')
-        ->join('menus', 'acciones.menu_id', '=', 'menus.id')
-        ->where('permisos.rol_id', $this->rol_id)
+        $permisos = DB::table('permiso')
+        ->join('accion', 'permiso.accion_id', '=', 'accion.id')
+        ->join('menu', 'accion.menu_id', '=', 'menu.id')
+        ->where('permiso.rol_id', $this->rol_id)
         ->select(
-            'menus.nombre as menu',
-            'acciones.id as accion_id',
-            'acciones.nombre as accion_nombre',
-            'acciones.es_menu',
-            'acciones.url',
-            'acciones.menu_id'
+            'menu.nombre as menu',
+            'accion.id as accion_id',
+            'accion.nombre as accion_nombre',
+            'accion.es_menu',
+            'accion.url',
+            'accion.menu_id'
         )
         ->get();
 

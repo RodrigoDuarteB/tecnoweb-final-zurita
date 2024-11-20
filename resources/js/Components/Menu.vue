@@ -20,7 +20,7 @@
                     </div>
                 </div>
                 <div>
-                    <ul class="mt-6 leading-10" v-for="(menu, index) in menus" :key="index">
+                    <ul class="mt-6 leading-10" v-for="(menu, index) in $page.props.auth.user.permisos" :key="index">
                         <MenuItem :menu="menu" />
                     </ul>
                 </div>
@@ -31,37 +31,7 @@
 </template>
 
 <script setup>
-import { usePage } from '@inertiajs/vue3';
 import MenuItem from './MenuItem.vue';
-
-    const { url } = usePage()
-
-    console.log(url)
-
-    const menus = [
-        {
-            nombre: 'Gestionar Usuarios',
-            acciones: [
-                {
-                    esMenu: true,
-                    nombre: 'Listar Usuarios',
-                    ruta: '/dashboard/user',
-                    activa: true
-                },
-                {
-                    esMenu: true,
-                    nombre: 'Registrar Usuario',
-                    ruta: '/dashboard/user/create',
-                    activa: false
-                },
-                {
-                    esMenu: false,
-                    nombre: 'Eliminar Usuario',
-                    ruta: 'usuarios/eliminar'
-                }
-            ]
-        }
-    ]
 </script>
 
 <style lang="scss" scoped>
