@@ -57,7 +57,7 @@ class AppServiceProvider extends ServiceProvider
         }
         Inertia::share([
             'styles' => $styles,
-            //'conteoPagina' => ContadorPagina::contar()
+            'conteoPagina' => ContadorPagina::contar()
         ]);
     }
 }

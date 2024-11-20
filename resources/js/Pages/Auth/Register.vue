@@ -1,17 +1,17 @@
 <script setup>
-import { Head, useForm } from '@inertiajs/vue3';
-import AuthenticationCard from '@/Components/AuthenticationCard.vue';
+import { useForm } from '@inertiajs/vue3';
 import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 
 const form = useForm({
-    nombres: '',
+    name: '',
     email: '',
     password: '',
     password_confirmation: '',
-    carnet_identidad: ''
+    carnet_identidad: '',
+    rol_id: 2
 });
 
 const submit = () => {
@@ -110,6 +110,18 @@ const submit = () => {
                 </p>
 
                 <form @submit.prevent="submit" class="sm:w-2/3 w-full px-4 lg:px-0 mx-auto">
+                    <div class="mb-3">
+                        <InputLabel for="name" value="Nombres" class="text-white"/>
+                        <TextInput
+                            id="name"
+                            v-model="form.name"
+                            class="mt-1 block w-full"
+                            required
+                            autofocus
+                        />
+                        <InputError class="mt-2" :message="form.errors.name" />
+                    </div>
+
                     <div>
                         <InputLabel for="email" value="Email" class="text-white"/>
                         <TextInput

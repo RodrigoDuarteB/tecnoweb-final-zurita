@@ -1,5 +1,4 @@
 <script setup>
-import AppLayout from '@/Layouts/AppLayout.vue';
 import { Link, router } from '@inertiajs/vue3';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import DialogModal from '@/Components/DialogModal.vue';

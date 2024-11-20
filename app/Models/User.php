@@ -11,6 +11,7 @@ use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Jetstream\HasTeams;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Facades\DB;
 
 class User extends Authenticatable
 {
@@ -59,7 +60,42 @@ class User extends Authenticatable
      */
     protected $appends = [
         'profile_photo_url',
+        'permisos'
     ];
+
+    public function getPermisosAttribute(){
+        $permisos = DB::table('permisos')
+        ->join('acciones', 'permisos.accion_id', '=', 'acciones.id')
+        ->join('menus', 'acciones.menu_id', '=', 'menus.id')
+        ->where('permisos.rol_id', $this->rol_id)
+        ->select(
+            'menus.nombre as menu',
+            'acciones.id as accion_id',
+            'acciones.nombre as accion_nombre',
+            'acciones.es_menu',
+            'acciones.url',
+            'acciones.menu_id'
+        )
+        ->get();
+
+        // Agrupar las acciones completas por menú
+        $groupedPermisos = $permisos->groupBy('menu')->map(function ($acciones, $menu) {
+            return [
+                'menu' => $menu,
+                'acciones' => $acciones->map(function ($accion) {
+                    return [
+                        'id' => $accion->accion_id,
+                        'nombre' => $accion->accion_nombre,
+                        'es_menu' => $accion->es_menu,
+                        'url' => $accion->url,
+                        'menu_id' => $accion->menu_id,
+                    ];
+                })->toArray(),
+            ];
+        })->values(); // Para convertir a una colección simple
+
+        return $groupedPermisos;
+    }
 
     /**
      * Get the attributes that should be cast.
