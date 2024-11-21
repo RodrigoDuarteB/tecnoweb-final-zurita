@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\MenuStoreRequest;
 use App\Models\Menu;
 use App\Models\Rol;
+use DB;
+use Exception;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -32,9 +34,22 @@ class RolController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(MenuStoreRequest $request)
+    public function store(/* MenuStore */Request $request)
     {
-        //
+        dd($request->all());
+        DB::beginTransaction();
+        try {
+            $rol = Rol::create([
+                'nombre' => $request->nombre,
+                'descripcion' => $request->descripcion,
+            ]);
+            $rol->permisos()->createMany();
+            DB::commit();
+        } catch(Exception $e) {
+            DB::rollBack();
+            return redirect()->route('rol.index')
+                ->with('error', 'Hubo un error al guardar el rol: '. $e->getMessage());
+        }
     }
 
     /**

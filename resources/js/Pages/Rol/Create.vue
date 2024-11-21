@@ -63,7 +63,7 @@ import Checkbox from '@/Components/Checkbox.vue';
     // Función para manejar el envío del formulario
     const submit = () => {
         //console.log(form);
-        /* console.log(form.transform(data => {
+        form.transform(data => {
             return {
                 ...data,
                 permisos: data.permisos.filter(per => per.acciones.some(acc => acc.checked)).map(per => ({
@@ -71,8 +71,8 @@ import Checkbox from '@/Components/Checkbox.vue';
                     acciones: per.acciones.filter(acc => acc.checked)
                 }))
             }
-        })) */
-        //form.post(route('rol.store'));
+        }).post(route('rol.store'))
+        form.post(route('rol.store'));
     };
 
 </script>
