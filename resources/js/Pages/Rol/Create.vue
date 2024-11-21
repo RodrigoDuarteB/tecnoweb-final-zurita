@@ -13,6 +13,17 @@
                     <InputError :message="errors.descripcion"/>
                     <TextInput v-model="form.descripcion" id="descripcion" class="mt-1 block w-full" />
                 </div>
+                <div class="flex flex-col gap-3">
+                    <div>
+                        <InputLabel value="Es Editable" />
+                        <Checkbox v-model="form.editable" :checked="form.editable" />
+                    </div>
+
+                    <div>
+                        <InputLabel value="Es Listable" />
+                        <Checkbox v-model="form.listable" :checked="form.listable" />
+                    </div>
+                </div>
             </div>
 
             <div class="flex flex-col mt-2 gap-3">
@@ -52,6 +63,8 @@ import Checkbox from '@/Components/Checkbox.vue';
     const form = useForm({
         nombre: '',
         descripcion: '',
+        editable: true,
+        listable: true,
         permisos: props.menus.map(menu => {
             return {
                 ...menu,
@@ -60,19 +73,15 @@ import Checkbox from '@/Components/Checkbox.vue';
         })
     });
 
-    // Función para manejar el envío del formulario
     const submit = () => {
-        //console.log(form);
         form.transform(data => {
             return {
                 ...data,
-                permisos: data.permisos.filter(per => per.acciones.some(acc => acc.checked)).map(per => ({
-                    ...per,
-                    acciones: per.acciones.filter(acc => acc.checked)
-                }))
+                permisos: data.permisos.flatMap(per => {
+                    return per.acciones.filter(acc => acc.checked).map(acc => ({ accion_id: acc.id}))
+                })
             }
         }).post(route('rol.store'))
-        form.post(route('rol.store'));
     };
 
 </script>

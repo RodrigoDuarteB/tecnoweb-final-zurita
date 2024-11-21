@@ -24,10 +24,10 @@ class RolStoreRequest extends FormRequest
         return [
             'nombre' => 'required|string',
             'descripcion' => 'nullable|string',
+            'editable' => 'nullable|boolean',
+            'listable' => 'nullable|boolean',
             'permisos' => 'nullable|array',
-            'permisos.*.menu_id' => 'required|integer',
-            'permisos.*.acciones' => 'required|array',
-            'permisos.*.acciones.*' => 'integer',
+            'permisos.*.accion_id' => 'required|integer'
         ];
     }
 }

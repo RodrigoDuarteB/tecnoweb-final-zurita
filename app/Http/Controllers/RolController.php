@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\MenuStoreRequest;
+use App\Http\Requests\RolStoreRequest;
 use App\Models\Menu;
 use App\Models\Rol;
 use DB;
@@ -17,7 +17,8 @@ class RolController extends Controller
      */
     public function index()
     {
-
+        $items = Rol::where('estado', 'Activo')->get();
+        return Inertia::render('Rol/Index', compact('items'));
     }
 
     /**
@@ -34,17 +35,19 @@ class RolController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(/* MenuStore */Request $request)
+    public function store(RolStoreRequest $request)
     {
-        dd($request->all());
         DB::beginTransaction();
         try {
             $rol = Rol::create([
                 'nombre' => $request->nombre,
                 'descripcion' => $request->descripcion,
+                'listable' => $request->listable,
+                'editable' => $request->editable,
             ]);
-            $rol->permisos()->createMany();
+            $rol->permisos()->createMany($request->permisos);
             DB::commit();
+            return redirect()->route('rol.index');
         } catch(Exception $e) {
             DB::rollBack();
             return redirect()->route('rol.index')
