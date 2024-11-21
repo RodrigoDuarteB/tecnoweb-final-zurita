@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ConfiguracionController;
 use App\Http\Controllers\MenuController;
+use App\Http\Controllers\RolController;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -28,4 +29,5 @@ Route::middleware([
     Route::resource('dashboard/user', UserController::class);
     Route::resource('configuracion', ConfiguracionController::class);
     Route::resource('menu', MenuController::class);
+    Route::resource('rol', RolController::class);
 });

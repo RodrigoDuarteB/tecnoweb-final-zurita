@@ -15,8 +15,11 @@ class ContadorPagina extends Model
 
     public static function contar() {
         $ruta = Request::path();
-        $obj = self::firstOrCreate(['ruta' => $ruta]);
-        $obj->increment('conteo');
-        return $obj->conteo;
+        if($ruta !== '/') {
+            $obj = self::firstOrCreate(['ruta' => $ruta]);
+            $obj->increment('conteo');
+            return $obj->conteo;
+        }
+        return 0;
     }
 }

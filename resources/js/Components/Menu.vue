@@ -19,11 +19,9 @@
                         <p class="font-bold text-base {{ config('styles.general.textos') }} pt-2 text-center w-24">{{ $page.props.auth.user.name }}</p>
                     </div>
                 </div>
-                <div>
-                    <ul class="mt-6 leading-10" v-for="(menu, index) in $page.props.auth.user.permisos" :key="index">
-                        <MenuItem :menu="menu" />
-                    </ul>
-                </div>
+                <ul class="flex flex-col gap-3 leading-10 mt-3" v-for="(menu, index) in $page.props.auth.user.permisos" :key="index">
+                    <MenuItem :menu="menu" />
+                </ul>
             </div>
         </div>
     </aside>

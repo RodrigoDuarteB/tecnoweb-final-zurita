@@ -1,64 +1,43 @@
 <template>
-    <ManagmentLayout>
-        <div class="py-12">
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
-                <div class="p-6 lg:p-8 bg-white border-b border-gray-200">
-                   <Link href="/menu/create" class="btn btn-success mr-2 inline-block">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 float-left">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                        </svg>
-                        Nuevo
-                   </Link>
-                   <form :action="route('user.index')" method="get" class="flex mt-2">
-                        <TextInput class="w-full" name="name" placeholder="Buscar por Nombre o Correo.."/>
-                        <button type="submit" class="ml-2 btn btn-primary">Buscar</button>
-                   </form>
-                   <table class="table-auto w-full">
-                       <thead>
-                            <tr>
-                                <th class="p-3">ID</th>
-                                <th class="p-3">Nombre</th>
-                                <th class="p-3">Descripcion</th>
-                                <th class="p-3">Acciones</th>
-                            </tr>
-                       </thead>
-                       <tbody>
-                            <tr v-for="item in menus" :key="item">
-                                <td class="p-3 border">{{ item.id }}</td>
-                                <td class="p-3 border">{{ item.nombre }}</td>
-                                <td class="p-3 border">{{ item.descripcion}}</td>
-                                <td class="p-3 border">
-                                <Link class="btn btn-primary mr-2 inline-block">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 float-left">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                                    </svg>
-                                    Mostrar
-                                </Link>
-                                <Link  class="btn btn-primary mr-2 inline-block">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 float-left">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125" />
-                                    </svg>
-                                    Editar
-                                </Link>
+    <ManagmentLayout title="Lista de Menús">
+        <table class="min-w-max w-full table-auto">
+            <thead>
+                <tr class="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+                    <th class="py-3 px-6 text-center">Id</th>
+                    <th class="py-3 px-6 text-center">Nombre</th>
+                    <th class="py-3 px-6 text-center">Descripcion</th>
+                    <th class="py-3 px-6 text-center">Acciones</th>
+                </tr>
+            </thead>
+            <tbody class="text-gray-600 text-sm font-light">
+                <tr class="border-b border-gray-200 hover:bg-gray-100" v-for="item in menus" :key="item">
+                    <td class="py-3 px-6 text-center whitespace-nowrap">
+                        {{ item.id }}
+                    </td>
+                    <td class="py-3 px-6 text-center whitespace-nowrap">
+                        {{ item.nombre }}
+                    </td>
+                    <td class="py-3 px-6 text-center whitespace-nowrap">
+                        {{ item.descripcion}}
+                    </td>
+                    <td class="py-3 px-6 text-center">
+                        <div class="flex item-center justify-center">
+                            <AuthPermission menu="Gestionar Menu" accion="Ver">
+                                <VerButton />
+                            </AuthPermission>
 
-                                <button class="btn btn-danger inline-block">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 float-left">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
-                                    </svg>
-                                    Borrar
-                                </button>
+                            <AuthPermission menu="Gestionar Menu" accion="Editar">
+                                <EditarButton />
+                            </AuthPermission>
 
-                            </td>
-                            </tr>
-                       </tbody>
-                   </table>
-                   <Paginator :paginator="users" class="mt-3"/>
-                   </div>
-                </div>
-            </div>
-        </div>
+                            <AuthPermission menu="Gestionar Menu" accion="Eliminar">
+                                <EliminarButton />
+                            </AuthPermission>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
         <DialogModal :show="showModal" @close="showModal = false">
             <template v-slot:title>
                 <h1>Confirmar Eliminación</h1>
@@ -76,12 +55,16 @@
 
 <script setup>
 import ManagmentLayout from '@/Layouts/ManagmentLayout.vue';
-import { Link, router } from '@inertiajs/vue3';
+import { router } from '@inertiajs/vue3';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import DialogModal from '@/Components/DialogModal.vue';
 import { ref } from 'vue';
 import Paginator from '@/Components/Paginator.vue';
-import TextInput from '@/Components/TextInput.vue';
+import AuthPermission from '@/Components/AuthPermission.vue';
+import VerButton from '@/Components/VerButton.vue';
+import EditarButton from '@/Components/EditarButton.vue';
+import EliminarButton from '@/Components/EliminarButton.vue';
+import NuevoButton from '@/Components/NuevoButton.vue';
 const props = defineProps(['menus'])
 console.log(props.menus);
 // Función para manejar la eliminación del usuario
