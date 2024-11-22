@@ -71,6 +71,7 @@ class User extends Authenticatable
         $permisos = DB::table('permiso')
         ->join('accion', 'permiso.accion_id', '=', 'accion.id')
         ->join('menu', 'accion.menu_id', '=', 'menu.id')
+        ->where('menu.estado', 'Activo')
         ->where('permiso.rol_id', $this->rol_id)
         ->select(
             'menu.nombre as menu',

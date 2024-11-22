@@ -31,7 +31,7 @@
                             </AuthPermission>
 
                             <AuthPermission menu="Gestionar Roles" accion="Eliminar" v-if="item.editable">
-                                <EliminarButton />
+                                <EliminarButton @click="confirmDeleteItem(item.id)"/>
                             </AuthPermission>
                         </div>
                     </td>
@@ -43,10 +43,10 @@
                 <h1>Confirmar Eliminación</h1>
             </template>
             <template v-slot:content>
-                <p>¿Estás seguro de que quieres eliminar al usuario <strong> {{ selectedUser?.name }} ({{  selectedUser?.email }}) </strong>?</p>
+                <p>¿Estás seguro de que quieres eliminar el Rol con id <strong> {{ selectedItem }}</strong>?</p>
             </template>
             <template v-slot:footer>
-                <PrimaryButton @click="deleteUser" class="bg-red-500 hover:bg-red-800">Eliminar</PrimaryButton>
+                <PrimaryButton @click="deleteItem" class="bg-red-500 hover:bg-red-800">Eliminar</PrimaryButton>
                 <button @click="showModal = false" class="ml-4">Cancelar</button>
             </template>
         </DialogModal>
@@ -64,19 +64,19 @@ import VerButton from '@/Components/VerButton.vue';
 import EditarButton from '@/Components/EditarButton.vue';
 import EliminarButton from '@/Components/EliminarButton.vue';
     const props = defineProps(['items'])
-    console.log(props.roles);
 
-    const deleteUser = (user) => {
-        if (selectedUser.value) {
-            router.delete(route('user.destroy', { user: selectedUser.value.id }));
+    const deleteItem = () => {
+        if (selectedItem.value) {
+            router.delete(route('rol.destroy', { id: selectedItem.value }))
             showModal.value = false;
         }
     };
 
     const showModal = ref(false);
-    const selectedUser = ref(null);
-    const confirmDeleteUser = (user) => {
-        selectedUser.value = user;
+    const selectedItem = ref(null);
+
+    const confirmDeleteItem = (id) => {
+        selectedItem.value = id;
         showModal.value = true;
     };
 </script>

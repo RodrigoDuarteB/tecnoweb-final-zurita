@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\RolStoreRequest;
+use App\Http\Requests\RolUpdateRequest;
 use App\Models\Menu;
 use App\Models\Rol;
 use DB;
@@ -17,7 +18,7 @@ class RolController extends Controller
      */
     public function index()
     {
-        $items = Rol::where('estado', 'Activo')->get();
+        $items = Rol::activos()->get();
         return Inertia::render('Rol/Index', compact('items'));
     }
 
@@ -45,7 +46,7 @@ class RolController extends Controller
                 'listable' => $request->listable,
                 'editable' => $request->editable,
             ]);
-            $rol->permisos()->createMany($request->permisos);
+            $rol->acciones()->sync($request->permisos);
             DB::commit();
             return redirect()->route('rol.index');
         } catch(Exception $e) {
@@ -60,7 +61,12 @@ class RolController extends Controller
      */
     public function show(Rol $rol)
     {
-        //
+        $rol->load(['acciones']);
+        $menus = Menu::activos()
+        ->with(['acciones'])
+        ->get();
+        $esVer = true;
+        return Inertia::render('Rol/Create', compact('rol', 'menus', 'esVer'));
     }
 
     /**
@@ -68,16 +74,34 @@ class RolController extends Controller
      */
     public function edit(Rol $rol)
     {
-        $rol->load(['permisos.accion.menu']);
-        return Inertia::render('Rol/Edit', compact('rol'));
+        $rol->load(['acciones']);
+        $menus = Menu::activos()
+        ->with(['acciones'])
+        ->get();
+        return Inertia::render('Rol/Create', compact('rol', 'menus'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Rol $rol)
+    public function update(RolUpdateRequest $request, Rol $rol)
     {
-        //
+        DB::beginTransaction();
+        try {
+            $rol->update([
+                'nombre' => $request->nombre,
+                'descripcion' => $request->descripcion,
+                'listable' => $request->listable,
+                'editable' => $request->editable
+            ]);
+            $rol->acciones()->sync($request->permisos);
+            DB::commit();
+            return redirect()->route('rol.index');
+        } catch(Exception $e) {
+            DB::rollBack();
+            return redirect()->route('rol.index')
+                ->with('error', 'Hubo un error al guardar el rol: '. $e->getMessage());
+        }
     }
 
     /**
@@ -85,6 +109,18 @@ class RolController extends Controller
      */
     public function destroy(Rol $rol)
     {
-        //
+        //dd($rol);
+        DB::beginTransaction();
+        try {
+            $rol->update([
+                'estado' => 'Inactivo'
+            ]);
+            DB::commit();
+            return redirect()->route('rol.index');
+        } catch(Exception $e) {
+            DB::rollBack();
+            return redirect()->route('rol.index')
+                ->with('error', 'Hubo un error al guardar el rol: '. $e->getMessage());
+        }
     }
 }
