@@ -2,23 +2,26 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\MenuStoreRequest;
 use App\Models\Menu;
+use DB;
+use Exception;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class MenuController extends Controller
 {
     /**
-     * Listar todos los menús.
+     * Display a listing of the resource.
      */
     public function index()
     {
-        $menus = Menu::orderBy('id')->paginate(10)->appends(request()->except("page"));
+        $menus = Menu::activos()->get();
         return Inertia::render('Menu/Index', compact('menus'));
     }
 
     /**
-     * Mostrar el formulario para crear un nuevo menú.
+     * Show the form for creating a new resource.
      */
     public function create()
     {
@@ -26,55 +29,58 @@ class MenuController extends Controller
     }
 
     /**
-     * 
+     * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(MenuStoreRequest $request)
     {
-        $validated = $request->validate([
-            'nombre' => 'required|string|max:255',
-            'descripcion' => 'nullable|string|max:500',
-            'estado' => 'required|boolean',
-        ]);
+        //dd($request->all());
+        DB::beginTransaction();
+        try {
+            $menu = Menu::create([
+                'nombre' => $request->nombre,
+                'descripcion' => $request->descripcion
+            ]);
 
-        Menu::create($validated);
-        return redirect()->route('menu.index')->with('success', 'Menú creado con éxito.');
+            $menu->acciones()->createMany($request->acciones);
+            DB::commit();
+            return redirect()->route('menu.index');
+        } catch (Exception $e) {
+            DB::rollBack();
+            return redirect()->route('menu.index')
+                ->with('error', 'Hubo un error al guardar el menu: '. $e->getMessage());
+        }
     }
 
     /**
-     * 
+     * Display the specified resource.
      */
     public function show(Menu $menu)
     {
-        return Inertia::render('Menu/Show', compact('menu'));
-    }
-
-    
-    public function edit(Menu $menu)
-    {
-        return Inertia::render('Menu/Edit', compact('menu'));
+        //
     }
 
     /**
-     * Actualizar 
+     * Show the form for editing the specified resource.
+     */
+    public function edit(Menu $menu)
+    {
+        $menu->load(['acciones']);
+        return Inertia::render('Menu/Index', compact('menu'));
+    }
+
+    /**
+     * Update the specified resource in storage.
      */
     public function update(Request $request, Menu $menu)
     {
-        $validated = $request->validate([
-            'nombre' => 'required|string|max:255',
-            'descripcion' => 'nullable|string|max:500',
-            'estado' => 'required|boolean',
-        ]);
-
-        $menu->update($validated);
-        return redirect()->route('menu.index')->with('success', 'Menú actualizado con éxito.');
+        //
     }
 
     /**
-     * Eliminar 
+     * Remove the specified resource from storage.
      */
     public function destroy(Menu $menu)
     {
-        $menu->delete();
-        return redirect()->route('menu.index')->with('success', 'Menú eliminado con éxito.');
+        //
     }
 }

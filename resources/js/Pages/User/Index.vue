@@ -1,11 +1,11 @@
 <script setup>
-import AppLayout from '@/Layouts/AppLayout.vue';
 import { Link, router } from '@inertiajs/vue3';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import DialogModal from '@/Components/DialogModal.vue';
 import { ref } from 'vue';
 import Paginator from '@/Components/Paginator.vue';
 import TextInput from '@/Components/TextInput.vue';
+import ManagmentLayout from '@/Layouts/ManagmentLayout.vue';
 const props = defineProps(['users'])
 // Función para manejar la eliminación del usuario
 const deleteUser = (user) => {
@@ -24,7 +24,7 @@ const confirmDeleteUser = (user) => {
 };
 </script>
 <template>
-    <AppLayout title="Usuarios">
+    <ManagmentLayout>
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 Lista de Usuarios
@@ -101,5 +101,5 @@ const confirmDeleteUser = (user) => {
                 <button @click="showModal = false" class="ml-4">Cancelar</button>
             </template>
         </DialogModal>
-    </AppLayout>
+    </ManagmentLayout>
 </template>

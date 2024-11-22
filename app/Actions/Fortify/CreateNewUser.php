@@ -2,6 +2,7 @@
 
 namespace App\Actions\Fortify;
 
+use App\Models\Cliente;
 use App\Models\Team;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
@@ -26,6 +27,7 @@ class CreateNewUser implements CreatesNewUsers
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => $this->passwordRules(),
             'terms' => Jetstream::hasTermsAndPrivacyPolicyFeature() ? ['accepted', 'required'] : '',
+            'rol_id' => ['required', 'integer']
         ])->validate();
 
         return DB::transaction(function () use ($input) {
@@ -33,8 +35,13 @@ class CreateNewUser implements CreatesNewUsers
                 'name' => $input['name'],
                 'email' => $input['email'],
                 'password' => Hash::make($input['password']),
-            ]), function (User $user) {
+                'rol_id' => $input['rol_id'],
+            ]), function (User $user) use ($input) {
                 $this->createTeam($user);
+                Cliente::create([
+                    'carnet_identidad' => $input['carnet_identidad'],
+                    'usuario_id' => $user->id
+                ]);
             });
         });
     }

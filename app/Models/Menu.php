@@ -2,29 +2,17 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Traits\Modelo;
 use Illuminate\Database\Eloquent\Model;
 
 class Menu extends Model
 {
-    use HasFactory;
+    use Modelo;
 
-    /**
-     * Tabla asociada al modelo.
-     */
     protected $table = 'menu';
+    protected $fillable = ['nombre', 'descripcion', 'estado'];
 
-    /**
-     * Atributos 
-     */
-    protected $fillable = [
-        'nombre',
-        'descripcion',
-        'estado',
-    ];
-
-   
-    protected $casts = [
-        'estado' => 'boolean',
-    ];
+    public function acciones() {
+        return $this->hasMany(Accion::class, 'menu_id');
+    }
 }
