@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\MenuStoreRequest;
+use App\Http\Requests\MenuUpdateRequest;
 use App\Models\Menu;
 use DB;
 use Exception;
@@ -71,15 +72,18 @@ class MenuController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Menu $menu)
+    public function update(MenuUpdateRequest $request, Menu $menu)
     {
+        //dd($request->all());
         DB::beginTransaction();
         try {
             $menu->update([
                 'nombre' => $request->nombre,
                 'descripcion' => $request->descripcion
             ]);
-            $menu->acciones()->update($request->acciones);
+            foreach($request->acciones as $accion) {
+                $menu->acciones()->updateOrCreate(['id' => $accion['id']], $accion);
+            }
             DB::commit();
             return redirect()->route('menu.index');
         } catch(Exception $e) {

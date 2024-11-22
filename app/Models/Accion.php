@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use App\Traits\Modelo;
 use Illuminate\Database\Eloquent\Model;
 
 class Accion extends Model
 {
+    use Modelo;
+
     protected $table = 'accion';
     protected $fillable = ['nombre', 'es_menu', 'url', 'menu_id', 'estado'];
 

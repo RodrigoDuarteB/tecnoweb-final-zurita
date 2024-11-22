@@ -114,4 +114,12 @@ class User extends Authenticatable
             //'password' => 'hashed',
         ];
     }
+
+    public function rol() {
+        return $this->belongsTo(Rol::class);
+    }
+
+    public function cliente() {
+        return $this->hasOne(Cliente::class, 'usuario_id');
+    }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreUserPost;
 use App\Http\Requests\UpdateUserPut;
+use App\Models\Rol;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -15,17 +16,8 @@ class UserController extends Controller
      */
     public function index()
     {
-        //dd($users);
-        $users=User::orderBy("id");
-        $name="";
-        if(request()->has("name")){
-            $name=request("name");
-            $users=$users->where('name','like','%'.$name.'%')
-                ->orwhere('email','like','%'.$name.'%');
-        }
-        $users=$users->paginate(10)->appends(request()->except("page"));
-        //dd($users->links());
-        return Inertia::render('User/Index',compact('users'));
+        $items = User::with('rol:id,nombre', 'cliente:id,carnet_identidad')->get();
+        return Inertia::render('User/Index',compact('items'));
     }
 
     /**
@@ -33,7 +25,10 @@ class UserController extends Controller
      */
     public function create()
     {
-        return Inertia::render('User/Create');
+        $roles = Rol::activos()
+        ->where('listable', true)
+        ->get();
+        return Inertia::render('User/Create', compact('roles'));
     }
 
     /**
