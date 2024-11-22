@@ -109,7 +109,6 @@ class RolController extends Controller
      */
     public function destroy(Rol $rol)
     {
-        //dd($rol);
         DB::beginTransaction();
         try {
             $rol->update([

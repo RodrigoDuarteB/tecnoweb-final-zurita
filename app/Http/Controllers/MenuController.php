@@ -16,8 +16,8 @@ class MenuController extends Controller
      */
     public function index()
     {
-        $menus = Menu::activos()->get();
-        return Inertia::render('Menu/Index', compact('menus'));
+        $items = Menu::activos()->get();
+        return Inertia::render('Menu/Index', compact('items'));
     }
 
     /**
@@ -33,7 +33,6 @@ class MenuController extends Controller
      */
     public function store(MenuStoreRequest $request)
     {
-        //dd($request->all());
         DB::beginTransaction();
         try {
             $menu = Menu::create([
@@ -56,7 +55,9 @@ class MenuController extends Controller
      */
     public function show(Menu $menu)
     {
-        //
+        $menu->load(['acciones']);
+        $esVer = true;
+        return Inertia::render('Menu/Create', compact('menu', 'esVer'));
     }
 
     /**
@@ -65,15 +66,27 @@ class MenuController extends Controller
     public function edit(Menu $menu)
     {
         $menu->load(['acciones']);
-        return Inertia::render('Menu/Index', compact('menu'));
+        return Inertia::render('Menu/Create', compact('menu'));
     }
-
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, Menu $menu)
     {
-        //
+        DB::beginTransaction();
+        try {
+            $menu->update([
+                'nombre' => $request->nombre,
+                'descripcion' => $request->descripcion
+            ]);
+            $menu->acciones()->update($request->acciones);
+            DB::commit();
+            return redirect()->route('menu.index');
+        } catch(Exception $e) {
+            DB::rollBack();
+            return redirect()->route('menu.index')
+                ->with('error', 'Hubo un error al guardar el rol: '. $e->getMessage());
+        }
     }
 
     /**
@@ -81,6 +94,20 @@ class MenuController extends Controller
      */
     public function destroy(Menu $menu)
     {
-        //
+        DB::beginTransaction();
+        try {
+            $menu->update([
+                'estado' => 'Inactivo'
+            ]);
+            $menu->acciones()->update([
+                'estado' => 'Inactivo'
+            ]);
+            DB::commit();
+            return redirect()->route('menu.index');
+        } catch(Exception $e) {
+            DB::rollBack();
+            return redirect()->route('menu.index')
+                ->with('error', 'Hubo un error al guardar el rol: '. $e->getMessage());
+        }
     }
 }

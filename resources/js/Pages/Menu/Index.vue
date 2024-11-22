@@ -10,7 +10,7 @@
                 </tr>
             </thead>
             <tbody class="text-gray-600 text-sm font-light">
-                <tr class="border-b border-gray-200 hover:bg-gray-100" v-for="item in menus" :key="item">
+                <tr class="border-b border-gray-200 hover:bg-gray-100" v-for="item in items" :key="item">
                     <td class="py-3 px-6 text-center whitespace-nowrap">
                         {{ item.id }}
                     </td>
@@ -23,15 +23,15 @@
                     <td class="py-3 px-6 text-center">
                         <div class="flex item-center justify-center">
                             <AuthPermission menu="Gestionar Menu" accion="Ver">
-                                <VerButton />
+                                <VerButton :href="route('menu.show', { id: item.id })" />
                             </AuthPermission>
 
                             <AuthPermission menu="Gestionar Menu" accion="Editar">
-                                <EditarButton />
+                                <EditarButton :href="route('menu.edit', { id: item.id })" />
                             </AuthPermission>
 
                             <AuthPermission menu="Gestionar Menu" accion="Eliminar">
-                                <EliminarButton />
+                                <EliminarButton @click="confirmDeleteItem(item.id)"/>
                             </AuthPermission>
                         </div>
                     </td>
@@ -43,10 +43,10 @@
                 <h1>Confirmar Eliminación</h1>
             </template>
             <template v-slot:content>
-                <p>¿Estás seguro de que quieres eliminar al usuario <strong> {{ selectedUser?.name }} ({{  selectedUser?.email }}) </strong>?</p>
+                <p>¿Estás seguro de que quieres eliminar el Menú con id <strong> {{ selectedItem }}</strong>?</p>
             </template>
             <template v-slot:footer>
-                <PrimaryButton @click="deleteUser" class="bg-red-500 hover:bg-red-800">Eliminar</PrimaryButton>
+                <PrimaryButton @click="deleteItem" class="bg-red-500 hover:bg-red-800">Eliminar</PrimaryButton>
                 <button @click="showModal = false" class="ml-4">Cancelar</button>
             </template>
         </DialogModal>
@@ -59,30 +59,26 @@ import { router } from '@inertiajs/vue3';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import DialogModal from '@/Components/DialogModal.vue';
 import { ref } from 'vue';
-import Paginator from '@/Components/Paginator.vue';
 import AuthPermission from '@/Components/AuthPermission.vue';
 import VerButton from '@/Components/VerButton.vue';
 import EditarButton from '@/Components/EditarButton.vue';
 import EliminarButton from '@/Components/EliminarButton.vue';
-import NuevoButton from '@/Components/NuevoButton.vue';
-const props = defineProps(['menus'])
-console.log(props.menus);
-// Función para manejar la eliminación del usuario
-const deleteUser = (user) => {
-    if (selectedUser.value) {
-        router.delete(route('user.destroy', { user: selectedUser.value.id }));
-        showModal.value = false;
-    }
-};
-// Estado para manejar la visibilidad del modal y el usuario seleccionado
-const showModal = ref(false);
-const selectedUser = ref(null);
-// Función para abrir el modal de confirmación
-const confirmDeleteUser = (user) => {
-    selectedUser.value = user;
-    showModal.value = true;
-};
+    const props = defineProps(['items'])
 
+    const deleteItem = () => {
+        if (selectedItem.value) {
+            router.delete(route('menu.destroy', { id: selectedItem.value }))
+            showModal.value = false;
+        }
+    };
+
+    const showModal = ref(false);
+    const selectedItem = ref(null);
+
+    const confirmDeleteItem = (id) => {
+        selectedItem.value = id;
+        showModal.value = true;
+    };
 </script>
 
 <style lang="scss" scoped>

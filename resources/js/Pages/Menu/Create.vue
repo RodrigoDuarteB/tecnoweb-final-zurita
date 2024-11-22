@@ -55,15 +55,13 @@ import Checkbox from '@/Components/Checkbox.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import EliminarButton from '@/Components/EliminarButton.vue';
 
-    // Definimos las props si es necesario recibir datos desde el padre
-    const props = defineProps(['errors']);
+    const props = defineProps(['errors', 'menu', 'esVer']);
+    const menu = props.menu
+    const disabled = props.esVer ? true : false
 
-    //const current_team_id = $page.props.auth.user.current_team_id;
-
-    // Inicializamos el formulario con los datos predefinidos
     const form = useForm({
-        nombre: '',
-        descripcion: '',
+        nombre: menu?.nombre ?? '',
+        descripcion: menu?.descripcion ?? '',
         acciones: [
             {
                 nombre: 'Listar',
@@ -90,7 +88,6 @@ import EliminarButton from '@/Components/EliminarButton.vue';
         ]
     });
 
-    // Función para manejar el envío del formulario
     const submit = () => {
         console.log(form);
         form.post(route('menu.store'));
