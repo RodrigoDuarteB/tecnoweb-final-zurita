@@ -1,5 +1,5 @@
 <template>
-    <ManagmentLayout title="Lista de Menús">
+    <ManagmentLayout title="Lista de Roles">
         <table class="min-w-max w-full table-auto">
             <thead>
                 <tr class="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
@@ -23,14 +23,14 @@
                     <td class="py-3 px-6 text-center">
                         <div class="flex item-center justify-center">
                             <AuthPermission menu="Gestionar Roles" accion="Ver">
-                                <VerButton />
+                                <VerButton :href="route('rol.show', { id: item.id })" />
                             </AuthPermission>
 
                             <AuthPermission menu="Gestionar Roles" accion="Editar">
-                                <EditarButton />
+                                <EditarButton :href="route('rol.edit', { id: item.id })" />
                             </AuthPermission>
 
-                            <AuthPermission menu="Gestionar Roles" accion="Eliminar">
+                            <AuthPermission menu="Gestionar Roles" accion="Eliminar" v-if="item.editable">
                                 <EliminarButton />
                             </AuthPermission>
                         </div>

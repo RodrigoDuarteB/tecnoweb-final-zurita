@@ -16,7 +16,6 @@ import { userHasAccion } from '../utils'
         menu: props.menu,
         accion: props.accion
     })
-    console.log(visible);
 </script>
 
 <style lang="scss" scoped>

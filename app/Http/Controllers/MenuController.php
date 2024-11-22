@@ -16,7 +16,7 @@ class MenuController extends Controller
      */
     public function index()
     {
-        $menus = Menu::all();
+        $menus = Menu::activos()->get();
         return Inertia::render('Menu/Index', compact('menus'));
     }
 
@@ -64,7 +64,8 @@ class MenuController extends Controller
      */
     public function edit(Menu $menu)
     {
-        //
+        $menu->load(['acciones']);
+        return Inertia::render('Menu/Index', compact('menu'));
     }
 
     /**

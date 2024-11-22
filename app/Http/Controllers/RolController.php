@@ -26,7 +26,7 @@ class RolController extends Controller
      */
     public function create()
     {
-        $menus = Menu::where('estado', 'Activo')
+        $menus = Menu::activos()
         ->with(['acciones'])
         ->get();
         return Inertia::render('Rol/Create', compact('menus'));
@@ -68,7 +68,8 @@ class RolController extends Controller
      */
     public function edit(Rol $rol)
     {
-        //
+        $rol->load(['permisos.accion.menu']);
+        return Inertia::render('Rol/Edit', compact('rol'));
     }
 
     /**

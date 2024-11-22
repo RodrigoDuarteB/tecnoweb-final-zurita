@@ -62,6 +62,12 @@ class User extends Authenticatable
     ];
 
     public function getPermisosAttribute(){
+        if($this->rol_id == 1) {
+            return Menu::activos()
+            ->with(['acciones'])
+            ->select('id', 'nombre as menu', 'estado')
+            ->get();
+        }
         $permisos = DB::table('permiso')
         ->join('accion', 'permiso.accion_id', '=', 'accion.id')
         ->join('menu', 'accion.menu_id', '=', 'menu.id')
