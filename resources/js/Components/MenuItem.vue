@@ -26,21 +26,19 @@
         <div v-if="menu.acciones.length && opened">
             <ul :class="['p-2 mt-2 space-y-2 overflow-hidden text-sm font-medium rounded-md shadow-inner', $page.props.styles.fondo]" aria-label="submenu">
                 <li class="px-2 py-1 text-white transition-colors duration-150" v-for="(accion, index) in menu.acciones.filter(m => m.es_menu)" :key="index">
-                    <div :class="['px-1 hover:text-gray-800 hover:bg-gray-100 rounded-md', page.url == accion.url ? '!text-gray-800 !bg-gray-100' : '']">
-                        <div class="flex items-center">
+                    <NavLink :href="accion.url" :class="['w-full px-1 hover:text-gray-800 hover:bg-gray-100 rounded-md', page.url == accion.url ? '!text-gray-800 !bg-gray-100' : '']">
+                        <div class="flex items-center hover:text-gray-800">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
                                 viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round"
                                     stroke-width="2"
                                     d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
                             </svg>
-                            <NavLink :href="accion.url">
-                                <div :class="['w-full ml-2 text-sm font-semibold text-white hover:text-gray-800', page.url == accion.url ? '!text-gray-800' : '']">
-                                    {{ accion.nombre }}
-                                </div>
-                            </NavLink>
+                            <div :class="['w-full ml-2 text-sm font-semibold text-white hover:text-gray-800', page.url == accion.url ? '!text-gray-800' : '']">
+                                {{ accion.nombre }}
+                            </div>
                         </div>
-                    </div>
+                    </NavLink>
                 </li>
             </ul>
         </div>

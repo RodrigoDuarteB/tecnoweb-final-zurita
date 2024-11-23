@@ -9,4 +9,8 @@ class Cliente extends Model
     protected $table = 'cliente';
 
     protected $fillable = ['carnet_identidad', 'usuario_id', 'estado'];
+
+    public function usuario() {
+        return $this->belongsTo(User::class, 'usuario_id');
+    }
 }

@@ -31,11 +31,11 @@
                     <td class="py-3 px-6 text-center">
                         <div class="flex item-center justify-center">
                             <AuthPermission menu="Gestionar Usuarios" accion="Ver">
-                                <VerButton :href="route('menu.show', { id: item.id })" />
+                                <VerButton :href="route('user.show', { id: item.id })" />
                             </AuthPermission>
 
                             <AuthPermission menu="Gestionar Usuarios" accion="Editar">
-                                <EditarButton :href="route('menu.edit', { id: item.id })" />
+                                <EditarButton :href="route('user.edit', { id: item.id })" />
                             </AuthPermission>
 
                             <AuthPermission menu="Gestionar Usuarios" accion="Eliminar">

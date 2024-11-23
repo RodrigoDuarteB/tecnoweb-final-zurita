@@ -6,8 +6,14 @@ use App\Http\Requests\StoreUserPost;
 use App\Http\Requests\UpdateUserPut;
 use App\Models\Rol;
 use App\Models\User;
+use DB;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Inertia\Inertia;
+
+use Str;
+use function Laravel\Prompts\password;
 
 class UserController extends Controller
 {
@@ -16,7 +22,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $items = User::with('rol:id,nombre', 'cliente:id,carnet_identidad')->get();
+        $items = User::with('rol:id,nombre', 'cliente:id,usuario_id,carnet_identidad')->get();
         return Inertia::render('User/Index',compact('items'));
     }
 
@@ -36,9 +42,21 @@ class UserController extends Controller
      */
     public function store(StoreUserPost $request)
     {
-        //dd($request->validated());
-        user::create($request->validated());
-        return redirect()->route('user.index');
+        DB::beginTransaction();
+        try {
+            $password = Str::random(12);
+            //sendEmail($password);
+            User::create([
+                ...$request->all(),
+                'password' => Hash::make($password)
+            ]);
+            DB::commit();
+            return redirect()->route('user.index');
+        } catch(Exception $e) {
+            DB::rollBack();
+            return redirect()->route('user.index')
+                ->with('error', 'Hubo un error al guardar el rol: '. $e->getMessage());
+        }
     }
 
     /**
@@ -46,7 +64,12 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        return Inertia::render('User/Show',compact('user'));
+        $user->load(['rol:id,nombre', 'cliente:id,usuario_id,carnet_identidad']);
+        $esVer = true;
+        $roles = Rol::activos()
+        ->where('listable', true)
+        ->get();
+        return Inertia::render('User/Create',compact('user', 'esVer', 'roles'));
     }
 
     /**

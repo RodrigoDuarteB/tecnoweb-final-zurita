@@ -22,10 +22,9 @@ class StoreUserPost extends FormRequest
     public function rules(): array
     {
         return [
-            'name'      => 'required|string|max:255',
-            'email'     => 'required|string|email|max:255|unique:users',
-            'password'  => 'required|string|min:8',
-            'current_team_id'   => 'exists:teams,id|integer',
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'rol_id'  => 'required|integer'
         ];
     }
 }
