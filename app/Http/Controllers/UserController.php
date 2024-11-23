@@ -9,6 +9,7 @@ use App\Models\User;
 use DB;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Inertia\Inertia;
 
@@ -44,7 +45,7 @@ class UserController extends Controller
     {
         DB::beginTransaction();
         try {
-            $password = Str::random(12);
+            $password = 'gobernacion123';//Str::random(12);
             //sendEmail($password);
             User::create([
                 ...$request->all(),
@@ -66,9 +67,7 @@ class UserController extends Controller
     {
         $user->load(['rol:id,nombre', 'cliente:id,usuario_id,carnet_identidad']);
         $esVer = true;
-        $roles = Rol::activos()
-        ->where('listable', true)
-        ->get();
+        $roles = Rol::activos()->get();
         return Inertia::render('User/Create',compact('user', 'esVer', 'roles'));
     }
 
@@ -77,7 +76,8 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        return Inertia::render('User/Edit',compact('user'));
+        $esEdit = true;
+        return Inertia::render('User/Create',compact('user', 'esEdit'));
     }
 
     /**
@@ -85,8 +85,34 @@ class UserController extends Controller
      */
     public function update(UpdateUserPut $request, User $user)
     {
-        $user->update($request->validated());
-        return redirect()->route('user.index');
+        //dd($request->all());
+        $user = Auth::user();
+        DB::beginTransaction();
+        try {
+            $datos = [
+                'name' => $request->name,
+                'email' => $request->email
+            ];
+            if(!empty($request->password)) {
+                $datos['password'] = Hash::make($request->password);
+            }
+            $user->update($datos);
+            DB::commit();
+            $emailChanged = $user->email !== $request->email;
+            $passwordChanged = !empty($request->password);
+            if ($emailChanged || $passwordChanged) {
+                Auth::logout();
+                $request->session()->invalidate();
+                $request->session()->regenerateToken();
+
+                return redirect()->route('login')->with('message', 'Your email or password has been updated. Please log in again.');
+            }
+            return redirect()->route('dashboard');
+        } catch(Exception $e) {
+            DB::rollBack();
+            return redirect()->route('user.index')
+                ->with('error', 'Hubo un error al guardar el rol: '. $e->getMessage());
+        }
     }
 
     /**

@@ -34,10 +34,6 @@
                                 <VerButton :href="route('user.show', { id: item.id })" />
                             </AuthPermission>
 
-                            <AuthPermission menu="Gestionar Usuarios" accion="Editar">
-                                <EditarButton :href="route('user.edit', { id: item.id })" />
-                            </AuthPermission>
-
                             <AuthPermission menu="Gestionar Usuarios" accion="Eliminar">
                                 <EliminarButton @click="confirmDeleteItem(item.id)"/>
                             </AuthPermission>

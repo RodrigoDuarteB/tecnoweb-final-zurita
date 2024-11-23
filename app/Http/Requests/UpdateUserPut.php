@@ -22,10 +22,10 @@ class UpdateUserPut extends FormRequest
     public function rules(): array
     {
         return [
-            'name'      => 'required|string|max:255',
-            'email'     => 'required|string|email|max:255|unique:users,email,'.$this->route("user")->id,
-            'password'  => 'required|string|min:8',
-            'current_team_id'   => 'exists:teams,id|integer',
+            'id' => 'required|integer',
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users,email,'.$this->route("user")->id,
+            'password'  => 'nullable|string|min:8'
         ];
     }
 }
