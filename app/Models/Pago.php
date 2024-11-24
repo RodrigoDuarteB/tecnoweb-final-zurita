@@ -22,13 +22,17 @@ class Pago extends Model
         'cliente_id',
         'estado',
     ];
-
-    /**
-     * Relación con el modelo Cliente.
-     * (Asegúrate de tener un modelo Cliente si es necesario).
-     */
+    
     public function cliente()
     {
         return $this->belongsTo(Cliente::class, 'cliente_id');
+    }
+
+    /**
+     * Relacion 
+     */
+    public function servicioPagos()
+    {
+        return $this->hasMany(ServicioPago::class, 'pago_id');
     }
 }

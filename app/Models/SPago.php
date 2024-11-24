@@ -27,18 +27,20 @@ class ServicioPago extends Model
         'total_descuento',
         'monto_descuento',
     ];
-
-    /**
-     * 
-     */
+    
     public function servicio()
     {
         return $this->belongsTo(Servicio::class, 'servicio_id');
     }
 
+    /**
+     * Relación con el modelo Pago.
+     * Un ServicioPago pertenece a un único Pago.
+     */
     
     public function pago()
     {
         return $this->belongsTo(Pago::class, 'pago_id');
     }
+    
 }

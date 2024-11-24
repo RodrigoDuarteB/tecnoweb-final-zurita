@@ -22,7 +22,9 @@ class Reclamo extends Model
         'estado',
         'reclamo',
     ];
+    public function cliente()
+    {
+        return $this->belongsTo(Cliente::class, 'cliente_id');
+    }
 
-
-  
 }
