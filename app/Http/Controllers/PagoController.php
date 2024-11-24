@@ -3,58 +3,67 @@
 namespace App\Http\Controllers;
 
 use App\Models\Pago;
+use App\Models\Cliente;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class PagoController extends Controller
 {
-    /**
-     * Listar todos los pagos.
-     */
+    //
     public function index()
     {
-        $pagos = Pago::orderBy('id')->paginate(10)->appends(request()->except("page"));
+        $pagos = Pago::with('cliente') 
+            ->orderBy('id')
+            ->paginate(10)
+            ->appends(request()->except("page"));
+
         return Inertia::render('Pago/Index', compact('pagos'));
     }
 
-   
+    /**
+     *
+     */
     public function create()
     {
-        return Inertia::render('Pago/Create');
+        $clientes = Cliente::all();
+        return Inertia::render('Pago/Create', compact('clientes'));
     }
 
-    /**
-     * Guardar un nuevo pago.
-     */
+   
     public function store(Request $request)
     {
         $validated = $request->validate([
             'fecha_hora' => 'required|date',
             'fecha_hora_confirmacion' => 'nullable|date',
-            'qr_imagen' => 'required|string',
+            'qr_imagen' => 'nullable|string|max:255',
             'cliente_id' => 'required|exists:clientes,id',
-            'estado' => 'required|string|max:50',
+            'estado' => 'required|string|max:255',
         ]);
 
         Pago::create($validated);
+
         return redirect()->route('pago.index')->with('success', 'Pago creado con éxito.');
     }
 
     /**
-     * Mostrar un pago específico.
+     * Mostrar los detalles de un pago específico.
      */
     public function show(Pago $pago)
     {
-        return Inertia::render('Pago/Show', compact('pago'));
+        $pago->load('servicioPagos'); 
+        return view('pago.show', compact('pago'));
     }
 
     /**
-     * Mostrar el formulario para editar un pago.
+     * 
      */
     public function edit(Pago $pago)
     {
-        return Inertia::render('Pago/Edit', compact('pago'));
+        $clientes = Cliente::all(); 
+
+        return Inertia::render('Pago/Edit', compact('pago', 'clientes'));
     }
+
 
     /**
      * Actualizar un pago existente.
@@ -64,12 +73,13 @@ class PagoController extends Controller
         $validated = $request->validate([
             'fecha_hora' => 'required|date',
             'fecha_hora_confirmacion' => 'nullable|date',
-            'qr_imagen' => 'required|string',
+            'qr_imagen' => 'nullable|string|max:255',
             'cliente_id' => 'required|exists:clientes,id',
-            'estado' => 'required|string|max:50',
+            'estado' => 'required|string|max:255',
         ]);
 
         $pago->update($validated);
+
         return redirect()->route('pago.index')->with('success', 'Pago actualizado con éxito.');
     }
 
@@ -79,6 +89,7 @@ class PagoController extends Controller
     public function destroy(Pago $pago)
     {
         $pago->delete();
+
         return redirect()->route('pago.index')->with('success', 'Pago eliminado con éxito.');
     }
 }

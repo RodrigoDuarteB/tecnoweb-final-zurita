@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cliente;
-use App\Models\Usuario; // Para cargar la lista de usuarios.
+use App\Models\Usuario; 
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -14,7 +14,7 @@ class ClienteController extends Controller
     {
         $clientes = Cliente::with('usuario') 
             ->orderBy('id', 'desc')
-            ->paginate(10); // Paginación.
+            
 
         return Inertia::render('Cliente/Index', compact('clientes'));
     }
@@ -31,7 +31,7 @@ class ClienteController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'estado' => 'required|string|max:255',
+            'estado' => 'required|boolean',
             'carnet_identidad' => 'required|string|max:20|unique:cliente,carnet_identidad',
             'usuario_id' => 'required|exists:usuarios,id',
         ]);

@@ -10,7 +10,7 @@ class Descuento extends Model
     use HasFactory;
 
     /**
-     * Tabla asociada al modelo.
+     * Table
      */
     protected $table = 'descuento';
 
@@ -36,8 +36,8 @@ class Descuento extends Model
     ];
 
   
-    public function usuario()
+    public function servicioDescuentos()
     {
-        return $this->belongsTo(User::class, 'usuario_id');
+        return $this->hasMany(ServicioDescuento::class, 'descuento_id', 'id');
     }
 }

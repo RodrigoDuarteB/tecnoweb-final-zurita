@@ -10,7 +10,7 @@ class Servicio extends Model
     use HasFactory;
 
     /**
-     * Tabla asociada al modelo.
+     * Tabla 
      */
     protected $table = 'servicio';
 
@@ -30,6 +30,15 @@ class Servicio extends Model
     protected $casts = [
         'estado' => 'boolean',
     ];
+    public function servicioDescuentos()
+    {
+        return $this->hasMany(ServicioDescuento::class, 'servicio_id');
+    }
+
+    public function servicioPagos()
+    {
+        return $this->hasMany(ServicioPago::class, 'servicio_id');
+    }
 
     /**
      * 
