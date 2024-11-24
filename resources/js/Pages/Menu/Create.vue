@@ -16,7 +16,10 @@
             </div>
 
             <div class="flex flex-col mt-2 gap-3">
-                <SecondaryButton class="w-fit" @click="handleAddAction">Añadir Acción</SecondaryButton>
+                <InputError :message="errors.acciones"/>
+                <SecondaryButton v-if="!esVer" class="w-fit" @click="handleAddAction">
+                    Añadir Acción
+                </SecondaryButton>
                 <span class="font-semibold text-[1rem] border-b border-b-gray-400">Acciones</span>
                 <ul v-for="(accion, index) in form.acciones.filter(acc => acc.estado == 'Activo')" :key="index">
                     <li class="flex gap-5 items-center border-b border-b-gray-400/60 pb-2">
@@ -54,6 +57,7 @@ import PrimaryButton from '@/Components/PrimaryButton.vue';
 import Checkbox from '@/Components/Checkbox.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import EliminarButton from '@/Components/EliminarButton.vue';
+import { hideLoading, showLoading } from '@/state';
 
     const props = defineProps(['errors', 'menu', 'esVer']);
     const menu = props.menu
@@ -127,10 +131,19 @@ import EliminarButton from '@/Components/EliminarButton.vue';
     }
 
     const submit = () => {
+        showLoading()
         if(menu?.id) {
-            form.transform(prepareToSend).put(route('menu.update', { id: menu.id }))
+            form.transform(prepareToSend).put(route('menu.update', { id: menu.id }), {
+                onFinish() {
+                    hideLoading()
+                }
+            })
         } else {
-            form.transform(prepareToSend).post(route('menu.store'))
+            form.transform(prepareToSend).post(route('menu.store'), {
+                onFinish() {
+                    hideLoading()
+                }
+            })
         }
     }
 

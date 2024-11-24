@@ -9,6 +9,7 @@
                     <div class="shadow mb-6">
                         <span class="text-[2rem] font-semibold">{{ title }}</span>
                     </div>
+                    <Banner />
                     <Card>
                         <slot />
                     </Card>
@@ -18,6 +19,7 @@
                 </div>
             </main>
         </div>
+        <Loading :is-visible="loadingState.isVisible"/>
     </div>
 </template>
 
@@ -26,9 +28,12 @@ import Menu from '@/Components/Menu.vue';
 import Header from '@/Components/Header.vue';
 import { usePage } from '@inertiajs/vue3';
 import Card from '@/Components/Card.vue';
+import Loading from '@/Components/Loading.vue';
+import { loadingState } from '@/state';
+import Banner from '@/Components/Banner.vue';
+
     console.log(usePage().props);
     const tema = localStorage.getItem('tema') ?? 'adultos'
-
     const props = defineProps(['title'])
 </script>
 

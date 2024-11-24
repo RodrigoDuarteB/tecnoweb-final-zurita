@@ -43,9 +43,17 @@ class MenuController extends Controller
 
             $menu->acciones()->createMany($request->acciones);
             DB::commit();
+            session()->flash('jetstream.flash', [
+                'banner' => 'Menú creado corretamente!',
+                'bannerStyle' => 'success'
+            ]);
             return redirect()->route('menu.index');
         } catch (Exception $e) {
             DB::rollBack();
+            session()->flash('jetstream.flash', [
+                'banner' => 'Hubo un error al crear el menú!',
+                'bannerStyle' => 'error'
+            ]);
             return redirect()->route('menu.index')
                 ->with('error', 'Hubo un error al guardar el menu: '. $e->getMessage());
         }
@@ -74,7 +82,6 @@ class MenuController extends Controller
      */
     public function update(MenuUpdateRequest $request, Menu $menu)
     {
-        //dd($request->all());
         DB::beginTransaction();
         try {
             $menu->update([
@@ -85,9 +92,17 @@ class MenuController extends Controller
                 $menu->acciones()->updateOrCreate(['id' => $accion['id']], $accion);
             }
             DB::commit();
+            session()->flash('jetstream.flash', [
+                'banner' => 'Menú editado corretamente!',
+                'bannerStyle' => 'success'
+            ]);
             return redirect()->route('menu.index');
         } catch(Exception $e) {
             DB::rollBack();
+            session()->flash('jetstream.flash', [
+                'banner' => 'Hubo un error al editar el menú!',
+                'bannerStyle' => 'error'
+            ]);
             return redirect()->route('menu.index')
                 ->with('error', 'Hubo un error al guardar el rol: '. $e->getMessage());
         }
@@ -107,9 +122,17 @@ class MenuController extends Controller
                 'estado' => 'Inactivo'
             ]);
             DB::commit();
+            session()->flash('jetstream.flash', [
+                'banner' => 'Menú eliminado corretamente!',
+                'bannerStyle' => 'success'
+            ]);
             return redirect()->route('menu.index');
         } catch(Exception $e) {
             DB::rollBack();
+            session()->flash('jetstream.flash', [
+                'banner' => 'Hubo un error al eliminar el menú!',
+                'bannerStyle' => 'error'
+            ]);
             return redirect()->route('menu.index')
                 ->with('error', 'Hubo un error al guardar el rol: '. $e->getMessage());
         }
