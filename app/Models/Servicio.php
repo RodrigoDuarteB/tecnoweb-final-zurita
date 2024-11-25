@@ -2,20 +2,22 @@
 
 namespace App\Models;
 
+use App\Traits\Modelo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Servicio extends Model
 {
     use HasFactory;
+    use Modelo;
 
     /**
-     * Tabla 
+     * Tabla
      */
     protected $table = 'servicio';
 
     /**
-     * Atributos 
+     * Atributos
      */
     protected $fillable = [
         'nombre',
@@ -30,9 +32,9 @@ class Servicio extends Model
     protected $casts = [
         'estado' => 'boolean',
     ];
-    public function servicioDescuentos()
+    public function descuentos()
     {
-        return $this->hasMany(ServicioDescuento::class, 'servicio_id');
+        return $this->belongsToMany(Descuento::class, 'servicio_descuento');
     }
 
     public function servicioPagos()
@@ -41,7 +43,7 @@ class Servicio extends Model
     }
 
     /**
-     * 
+     *
      */
     public function usuario()
     {

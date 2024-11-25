@@ -2,18 +2,20 @@
 
 namespace App\Models;
 
+use App\Traits\Modelo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Pago extends Model
 {
     use HasFactory;
+    use Modelo;
 
-   
+
     protected $table = 'pago';
 
     /**
-     * Atributos 
+     * Atributos
      */
     protected $fillable = [
         'fecha_hora',
@@ -22,17 +24,17 @@ class Pago extends Model
         'cliente_id',
         'estado',
     ];
-    
+
     public function cliente()
     {
         return $this->belongsTo(Cliente::class, 'cliente_id');
     }
 
     /**
-     * Relacion 
+     * Relacion
      */
-    public function servicioPagos()
+    public function servicios()
     {
-        return $this->hasMany(ServicioPago::class, 'pago_id');
+        return $this->belongsToMany(Servicio::class, 'servicio_pago');
     }
 }
