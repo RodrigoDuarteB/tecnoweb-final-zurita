@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ConfiguracionController;
 use App\Http\Controllers\MenuController;
+use App\Http\Controllers\PoliticaController;
 use App\Http\Controllers\ReclamoController;
 use App\Http\Controllers\RolController;
 use App\Http\Controllers\ServicioController;
@@ -34,4 +35,5 @@ Route::middleware([
     Route::resource('rol', RolController::class);
     Route::resource('servicio', ServicioController::class);
     Route::resource('reclamo', ReclamoController::class);
+    Route::resource('politica', PoliticaController::class);
 });
