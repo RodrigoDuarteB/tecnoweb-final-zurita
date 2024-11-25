@@ -12,7 +12,7 @@ class PagoController extends Controller
     //
     public function index()
     {
-        $pagos = Pago::with('cliente') 
+        $pagos = Pago::with('cliente')
             ->orderBy('id')
             ->paginate(10)
             ->appends(request()->except("page"));
@@ -25,11 +25,10 @@ class PagoController extends Controller
      */
     public function create()
     {
-        $clientes = Cliente::all();
-        return Inertia::render('Pago/Create', compact('clientes'));
+        return Inertia::render('Pago/Create');
     }
 
-   
+
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -50,16 +49,16 @@ class PagoController extends Controller
      */
     public function show(Pago $pago)
     {
-        $pago->load('servicioPagos'); 
+        $pago->load('servicioPagos');
         return view('pago.show', compact('pago'));
     }
 
     /**
-     * 
+     *
      */
     public function edit(Pago $pago)
     {
-        $clientes = Cliente::all(); 
+        $clientes = Cliente::all();
 
         return Inertia::render('Pago/Edit', compact('pago', 'clientes'));
     }
@@ -91,5 +90,11 @@ class PagoController extends Controller
         $pago->delete();
 
         return redirect()->route('pago.index')->with('success', 'Pago eliminado con éxito.');
+    }
+
+    public function buscar(Request $request) {
+        return response()->json([
+            'termino' => $request->termino
+        ]);
     }
 }

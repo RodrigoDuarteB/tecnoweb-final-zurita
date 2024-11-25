@@ -8,6 +8,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\ConfiguracionController;
 use App\Http\Controllers\DescuentoController;
 use App\Http\Controllers\MenuController;
+use App\Http\Controllers\PagoController;
 use App\Http\Controllers\PoliticaController;
 use App\Http\Controllers\ReclamoController;
 use App\Http\Controllers\RolController;
@@ -38,4 +39,6 @@ Route::middleware([
     Route::resource('reclamo', ReclamoController::class);
     Route::resource('politica', PoliticaController::class);
     Route::resource('descuento', DescuentoController::class);
+    Route::resource('pago', PagoController::class);
+    Route::post('pago/buscar', [PagoController::class, 'buscar'])->name('pago.buscar');
 });
