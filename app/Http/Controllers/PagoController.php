@@ -91,10 +91,4 @@ class PagoController extends Controller
 
         return redirect()->route('pago.index')->with('success', 'Pago eliminado con éxito.');
     }
-
-    public function buscar(Request $request) {
-        return response()->json([
-            'termino' => $request->termino
-        ]);
-    }
 }

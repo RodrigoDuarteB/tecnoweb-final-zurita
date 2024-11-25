@@ -40,5 +40,4 @@ Route::middleware([
     Route::resource('politica', PoliticaController::class);
     Route::resource('descuento', DescuentoController::class);
     Route::resource('pago', PagoController::class);
-    Route::post('pago/buscar', [PagoController::class, 'buscar'])->name('pago.buscar');
 });

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Servicio;
 use App\Models\User;
+use Carbon\Carbon;
+use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -88,5 +90,46 @@ class ServicioController extends Controller
 
 
         return redirect()->route('servicio.index')->with('success', 'Servicio eliminado con éxito.');
+    }
+
+    public function buscar(Request $request) {
+        $termino = $request->input('termino');
+        $fechaActual = Carbon::now();
+
+        // Buscar servicios que contengan el término en el nombre
+        $servicios = Servicio::activos()
+        ->whereRaw('LOWER(nombre) LIKE ?', ['%' . strtolower($termino) . '%'])
+        ->with(['descuentos' => function ($query) use ($fechaActual) {
+                $query->where('descuento.fecha_inicio', '<=', $fechaActual)
+                    ->where('descuento.fecha_fin', '>=', $fechaActual)
+                    ->where('descuento.estado', 'Activo') // Ensure it's explicitly from "descuento" table
+                    ->orderBy('descuento.fecha_inicio', 'desc')
+                    ->limit(1); // Get only the most recent discount
+            }])
+            ->get();
+
+        // Formatear la respuesta para incluir el monto con descuento
+        $resultado = $servicios->map(function ($servicio) {
+            $descuento = $servicio->descuentos->first(); // Obtener el único descuento cargado
+            $montoDescuento = null;
+
+            if ($descuento) {
+                $descuentoAplicado = $descuento->porcentaje > 0
+                    ? ($servicio->precio * $descuento->porcentaje) / 100
+                    : $descuento->monto;
+
+                $montoDescuento = $servicio->precio - $descuentoAplicado;
+            }
+
+            return [
+                'id' => $servicio->id,
+                'nombre' => $servicio->nombre,
+                'precio' => $servicio->precio,
+                'monto_descuento' => $montoDescuento,
+                'descuento' => $descuento
+            ];
+        });
+
+        return response()->json($resultado);
     }
 }

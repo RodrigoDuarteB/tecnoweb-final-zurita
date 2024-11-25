@@ -23,7 +23,7 @@
                 <div class="my-2" v-if="!esVer">
                     <InputLabel value="Añadir Servicios"/>
                     <SelectAdd :items="getServiciosItems()" @selected="handleAddServicio" button-label="Añadir Servicios al Pago" class="w-full"/>
-                    <button @click="handleBuscar">Buscar</button>
+                    <AutcompletarServicios @select="(val) => console.log(val)"/>
                 </div>
                 <span class="font-semibold text-[1rem] border-b border-b-gray-400">
                     Servicios del Pago
@@ -87,6 +87,8 @@ import PrimaryButton from '@/Components/PrimaryButton.vue';
 import EliminarButton from '@/Components/EliminarButton.vue';
 import { hideLoading, showLoading } from '@/state';
 import SelectAdd from '@/Components/SelectAdd.vue';
+import axios from 'axios';
+import AutcompletarServicios from '@/Components/AutcompletarServicios.vue';
 
     const props = defineProps(['errors', 'pago', 'servicios', 'esVer']);
     const pago = props.pago
@@ -158,8 +160,13 @@ import SelectAdd from '@/Components/SelectAdd.vue';
         termino: ''
     })
 
-    function handleBuscar() {
-        formBuscar.post(route('pago.buscar'))
+    async function handleBuscar() {
+        const res = await axios.get('/api/servicio/buscar', {
+            params: {
+                termino: formBuscar.termino
+            }
+        })
+        console.log(res.data);
     }
 
 </script>
