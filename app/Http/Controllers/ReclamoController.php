@@ -19,12 +19,11 @@ class ReclamoController extends Controller
     }
 
     /**
-     * 
+     *
      */
     public function create()
     {
-        $clientes = Cliente::all(); // Para seleccionar un cliente asociado.
-        return Inertia::render('Reclamo/Create', compact('clientes'));
+        return Inertia::render('Reclamo/Create');
     }
 
     /**
@@ -33,12 +32,13 @@ class ReclamoController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'descripcion' => 'required|string|max:500',
-            'estado' => 'required|in:pendiente,resuelto',
-            'cliente_id' => 'required|exists:clientes,id',
+            'reclamo' => 'required|string|max:500'
         ]);
 
-        Reclamo::create($validated);
+        Reclamo::create([
+            ...$validated,
+            'cliente_id' => auth()->user()->cliente()->id, // Asignar el cliente al reclamo.
+        ]);
         return redirect()->route('reclamo.index')->with('success', 'Reclamo creado con éxito.');
     }
 
@@ -47,11 +47,11 @@ class ReclamoController extends Controller
      */
     public function show(Reclamo $reclamo)
     {
-        $reclamo->load('cliente'); // Cargar 
+        $reclamo->load('cliente'); // Cargar
         return Inertia::render('Reclamo/Show', compact('reclamo'));
     }
 
-  
+
     public function edit(Reclamo $reclamo)
     {
         $clientes = Cliente::all();
@@ -70,7 +70,7 @@ class ReclamoController extends Controller
         return redirect()->route('reclamo.index')->with('success', 'Reclamo actualizado con éxito.');
     }
 
-   
+
     public function destroy(Reclamo $reclamo)
     {
         $reclamo->delete();

@@ -13,8 +13,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Inertia\Inertia;
 
-use Str;
-use function Laravel\Prompts\password;
 
 class UserController extends Controller
 {
@@ -52,6 +50,10 @@ class UserController extends Controller
                 'password' => Hash::make($password)
             ]);
             DB::commit();
+            session()->flash('jetstream.flash', [
+                'banner' => 'Usuario creado corretamente!',
+                'bannerStyle' => 'success'
+            ]);
             return redirect()->route('user.index');
         } catch(Exception $e) {
             DB::rollBack();
@@ -107,6 +109,10 @@ class UserController extends Controller
 
                 return redirect()->route('login')->with('message', 'Your email or password has been updated. Please log in again.');
             }
+            session()->flash('jetstream.flash', [
+                'banner' => 'Tu usuario fue modificado corretamente!',
+                'bannerStyle' => 'success'
+            ]);
             return redirect()->route('dashboard');
         } catch(Exception $e) {
             DB::rollBack();

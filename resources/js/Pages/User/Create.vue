@@ -51,6 +51,7 @@ import InputLabel from '@/Components/InputLabel.vue';
 import TextInput from '@/Components/TextInput.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import Select from '@/Components/Select.vue';
+import { hideLoading, showLoading } from '@/state';
 
     const props = defineProps(['errors', 'user', 'esVer', 'roles', 'esEdit']);
     const usuario = props.user
@@ -76,10 +77,19 @@ import Select from '@/Components/Select.vue';
     });
 
     const submit = () => {
+        showLoading()
         if(usuario?.id) {
-            form.put(route('user.update', { id: usuario.id }))
+            form.put(route('user.update', { id: usuario.id }), {
+                onFinish() {
+                    hideLoading()
+                }
+            })
         } else {
-            form.post(route('user.store'))
+            form.post(route('user.store'), {
+                onFinish() {
+                    hideLoading()
+                }
+            })
         }
     }
 

@@ -7,7 +7,9 @@ use App\Models\User;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ConfiguracionController;
 use App\Http\Controllers\MenuController;
+use App\Http\Controllers\ReclamoController;
 use App\Http\Controllers\RolController;
+use App\Http\Controllers\ServicioController;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -30,4 +32,6 @@ Route::middleware([
     Route::resource('configuracion', ConfiguracionController::class);
     Route::resource('menu', MenuController::class);
     Route::resource('rol', RolController::class);
+    Route::resource('servicio', ServicioController::class);
+    Route::resource('reclamo', ReclamoController::class);
 });

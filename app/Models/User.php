@@ -65,7 +65,8 @@ class User extends Authenticatable
         if($this->rol_id == 1) {
             return Menu::activos()
             ->with(['acciones'])
-            ->select('id', 'nombre as menu', 'estado')
+            ->select('id', 'nombre as menu', 'estado', 'created_at')
+            ->orderBy('created_at')
             ->get();
         }
         $permisos = DB::table('permiso')
@@ -81,6 +82,7 @@ class User extends Authenticatable
             'accion.url',
             'accion.menu_id'
         )
+        ->orderBy('menu.created_at')
         ->get();
 
         // Agrupar las acciones completas por menú

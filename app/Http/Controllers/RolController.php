@@ -48,6 +48,10 @@ class RolController extends Controller
             ]);
             $rol->acciones()->sync($request->permisos);
             DB::commit();
+            session()->flash('jetstream.flash', [
+                'banner' => 'Rol creado corretamente!',
+                'bannerStyle' => 'success'
+            ]);
             return redirect()->route('rol.index');
         } catch(Exception $e) {
             DB::rollBack();
@@ -96,6 +100,10 @@ class RolController extends Controller
             ]);
             $rol->acciones()->sync($request->permisos);
             DB::commit();
+            session()->flash('jetstream.flash', [
+                'banner' => 'Rol modificado corretamente!',
+                'bannerStyle' => 'success'
+            ]);
             return redirect()->route('rol.index');
         } catch(Exception $e) {
             DB::rollBack();
@@ -115,6 +123,10 @@ class RolController extends Controller
                 'estado' => 'Inactivo'
             ]);
             DB::commit();
+            session()->flash('jetstream.flash', [
+                'banner' => 'Rol eliminado corretamente!',
+                'bannerStyle' => 'success'
+            ]);
             return redirect()->route('rol.index');
         } catch(Exception $e) {
             DB::rollBack();

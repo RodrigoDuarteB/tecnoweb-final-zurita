@@ -35,7 +35,7 @@
                         <span class="w-36">{{ permiso.nombre }}</span>
                         <div v-for="(accion, index2) in permiso.acciones" :key="index2">
                             <InputLabel :value="accion.nombre" />
-                            <Checkbox v-model="accion.checked" :checked="accion.checked" :disabled="!editable"/>
+                            <Checkbox v-model="accion.checked" :checked="accion.checked" :disabled="esVer"/>
                         </div>
                     </li>
                 </ul>
@@ -56,6 +56,7 @@ import InputLabel from '@/Components/InputLabel.vue';
 import TextInput from '@/Components/TextInput.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import Checkbox from '@/Components/Checkbox.vue';
+import { hideLoading, showLoading } from '@/state';
 
     const props = defineProps(['errors', 'menus', 'rol', 'esVer']);
     const rol = props.rol
@@ -100,10 +101,19 @@ import Checkbox from '@/Components/Checkbox.vue';
     }
 
     const submit = () => {
+        showLoading()
         if(rol?.id) {
-            form.transform(prepareToSend).put(route('rol.update', { id: rol.id }))
+            form.transform(prepareToSend).put(route('rol.update', { id: rol.id }), {
+                onFinish() {
+                    hideLoading()
+                }
+            })
         } else {
-            form.transform(prepareToSend).post(route('rol.store'))
+            form.transform(prepareToSend).post(route('rol.store'), {
+                onFinish() {
+                    hideLoading()
+                }
+            })
         }
     };
 
