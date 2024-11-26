@@ -15,10 +15,14 @@ class PagoController extends Controller
     //
     public function index()
     {
-        $items = Pago::with('cliente')
-        ->where('estado', '<>', 'Inactivo')
-        ->get();
+        $cliente = auth()->user()->cliente;
+        $items = Pago::with('cliente.usuario')
+        ->where('estado', '<>', 'Inactivo');
 
+        if ($cliente) {
+            $items = $items->where('cliente_id', $cliente->id);
+        }
+        $items = $items->get();
         return Inertia::render('Pago/Index', compact('items'));
     }
 

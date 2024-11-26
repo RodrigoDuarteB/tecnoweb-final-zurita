@@ -20,7 +20,7 @@
 
             <div class="flex flex-col mt-2 gap-3">
                 <InputError :message="errors.servicios"/>
-                <div class="my-2" v-if="!esVer">
+                <div class="my-2" v-if="editable">
                     <AutcompletarServicios @select="handleAddServicio"/>
                 </div>
                 <span class="font-semibold text-[1rem] border-b border-b-gray-400">
@@ -37,7 +37,7 @@
                             <th class="py-3 px-6 text-center">Descuento p/u</th>
                             <th class="py-3 px-6 text-center">Total Descuento</th>
                             <th class="py-3 px-6 text-center">Subtotal</th>
-                            <th class="py-3 px-6 text-center" v-if="!esVer">Acciones</th>
+                            <th class="py-3 px-6 text-center" v-if="editable">Acciones</th>
                         </tr>
                     </thead>
                     <tbody class="text-gray-600 text-sm font-light">
@@ -49,7 +49,7 @@
                                 {{ item.nombre }}
                             </td>
                             <td class="py-3 px-6 whitespace-nowrap">
-                                <div v-if="!esVer" class="flex gap-2 items-center justify-center">
+                                <div v-if="editable" class="flex gap-2 items-center justify-center">
                                     <button @click="handleChangeCantidad({ index, type: '-' })" type="button" class="px-2 py-1 bg-blue-400 rounded-md font-semibold text-[1rem]">
                                         -
                                     </button>
@@ -74,7 +74,7 @@
                             <td class="py-3 px-6 text-center whitespace-nowrap">
                                 {{ numberFormat.format(item.subtotal) }}
                             </td>
-                            <td class="py-3 px-6 text-center" v-if="!esVer">
+                            <td class="py-3 px-6 text-center" v-if="editable">
                                 <div class="flex item-center justify-center">
                                     <EliminarButton
                                         @click="() => handleDeleteServicio(index)"  svg-class="size-6"
@@ -99,7 +99,11 @@
                 </table>
             </div>
 
-            <PrimaryButton v-if="!esVer" type="submit" class="mt-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
+            <div v-if="esConfirmar">
+                Confirmar Pago
+            </div>
+
+            <PrimaryButton v-if="editable" type="submit" class="mt-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
                 {{ form.id ? 'Actualizar' : 'Guardar' }}
             </PrimaryButton>
         </form>
@@ -121,10 +125,11 @@ import { ourParseFloat } from '@/utils';
     const props = defineProps(['errors', 'pago', 'servicios', 'esVer', 'esConfirmar']);
     const pago = props.pago
     const numberFormat = Intl.NumberFormat('es-BO', {maximumFractionDigits: 2})
+    const editable = !props.esVer && !props.esConfirmar
 
     function getTitulo() {
         if(pago) {
-            return props.esVer ? `Ver Pago ${pago.id}` : `Editar Pago ${pago.id}`
+            return props.esVer ? `Ver Pago ${pago.id}` : `Confirmar Pago ${pago.id}`
         }
         return 'Registrar Pago'
     }

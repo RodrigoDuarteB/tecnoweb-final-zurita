@@ -4,6 +4,7 @@
             <thead>
                 <tr class="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
                     <th class="py-3 px-6 text-center">Id</th>
+                    <th class="py-3 px-6 text-center">Cliente</th>
                     <th class="py-3 px-6 text-center">Fecha Hora</th>
                     <th class="py-3 px-6 text-center">Fecha Hora Confimación</th>
                     <th class="py-3 px-6 text-center">Estado</th>
@@ -14,6 +15,9 @@
                 <tr class="border-b border-gray-200 hover:bg-gray-100" v-for="item in items" :key="item">
                     <td class="py-3 px-6 text-center whitespace-nowrap">
                         {{ item.id }}
+                    </td>
+                    <td class="py-3 px-6 text-center whitespace-nowrap">
+                        {{ item.cliente.usuario.name }}
                     </td>
                     <td class="py-3 px-6 text-center whitespace-nowrap">
                         {{ item.fecha_hora }}
@@ -30,11 +34,11 @@
                                 <VerButton :href="route('pago.show', { id: item.id })" />
                             </AuthPermission>
 
-                            <AuthPermission menu="Gestionar Pagos" accion="Editar">
+                            <AuthPermission menu="Gestionar Pagos" accion="Editar" v-if="item.estado == 'Pendiente'">
                                 <EditarButton :href="route('pago.edit', { id: item.id })" />
                             </AuthPermission>
 
-                            <AuthPermission menu="Gestionar Pagos" accion="Eliminar">
+                            <AuthPermission menu="Gestionar Pagos" accion="Eliminar" v-if="item.estado == 'Pendiente'">
                                 <EliminarButton @click="confirmDeleteItem(item.id)"/>
                             </AuthPermission>
                         </div>
