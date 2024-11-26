@@ -111,21 +111,28 @@ class ServicioController extends Controller
         // Formatear la respuesta para incluir el monto con descuento
         $resultado = $servicios->map(function ($servicio) {
             $descuento = $servicio->descuentos->first(); // Obtener el único descuento cargado
-            $montoDescuento = null;
+            $monto_descuento = null;
+            $nombre = $servicio->nombre;
+            $precio_servicio = random_int(35, 500);
 
             if ($descuento) {
-                $descuentoAplicado = $descuento->porcentaje > 0
-                    ? ($servicio->precio * $descuento->porcentaje) / 100
+                $monto_descuento = $descuento->porcentaje > 0
+                    ? ($precio_servicio * $descuento->porcentaje) / 100
                     : $descuento->monto;
-
-                $montoDescuento = $servicio->precio - $descuentoAplicado;
+                $precio = number_format($precio_servicio - $monto_descuento, 2);
+                $nombre .= " / {$precio} Bs (-{$descuento->porcentaje}%)";
+            } else {
+                $precio = number_format($precio_servicio, 2);
+                $nombre .= " / {$precio} Bs";
             }
 
             return [
                 'id' => $servicio->id,
-                'nombre' => $servicio->nombre,
-                'precio' => $servicio->precio,
-                'monto_descuento' => $montoDescuento,
+                'nombre' => $nombre,
+                'precio' => $precio_servicio,
+                'monto_descuento' => $monto_descuento,
+                'subtotal' => $precio_servicio - ($monto_descuento ?? 0),
+                'total_descuento' => $monto_descuento,
                 'descuento' => $descuento
             ];
         });

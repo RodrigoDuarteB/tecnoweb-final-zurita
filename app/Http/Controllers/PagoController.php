@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Pago;
 use App\Models\Cliente;
+use Carbon\Carbon;
+use DB;
+use Exception;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -12,12 +15,11 @@ class PagoController extends Controller
     //
     public function index()
     {
-        $pagos = Pago::with('cliente')
-            ->orderBy('id')
-            ->paginate(10)
-            ->appends(request()->except("page"));
+        $items = Pago::with('cliente')
+        ->where('estado', '<>', 'Inactivo')
+        ->get();
 
-        return Inertia::render('Pago/Index', compact('pagos'));
+        return Inertia::render('Pago/Index', compact('items'));
     }
 
     /**
@@ -31,17 +33,33 @@ class PagoController extends Controller
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'fecha_hora' => 'required|date',
-            'fecha_hora_confirmacion' => 'nullable|date',
-            'qr_imagen' => 'nullable|string|max:255',
-            'cliente_id' => 'required|exists:clientes,id',
-            'estado' => 'required|string|max:255',
-        ]);
+        DB::beginTransaction();
+        try {
+            $pago = Pago::create([
+                'fecha_hora' => Carbon::now(),
+                'cliente_id' => auth()->user()->cliente->id
+            ]);
 
-        Pago::create($validated);
+            $servicios = [];
+            foreach ($request->servicios as $servicio) {
+                $servicios[$servicio['servicio_id']] = $servicio;
+            }
 
-        return redirect()->route('pago.index')->with('success', 'Pago creado con éxito.');
+            $pago->servicios()->sync($servicios);
+            DB::commit();
+            session()->flash('jetstream.flash', [
+                'banner' => 'Pago creado corretamente!',
+                'bannerStyle' => 'success'
+            ]);
+            return redirect()->route('pago.index');
+        } catch (Exception $e) {
+            DB::rollBack();
+            session()->flash('jetstream.flash', [
+                'banner' => 'Hubo un error al crear el Pago!',
+                'bannerStyle' => 'error'
+            ]);
+            return redirect()->route('pago.index');
+        }
     }
 
     /**
@@ -49,8 +67,9 @@ class PagoController extends Controller
      */
     public function show(Pago $pago)
     {
-        $pago->load('servicioPagos');
-        return view('pago.show', compact('pago'));
+        $pago->load('servicios');
+        $esVer = true;
+        return Inertia::render('Pago/Create', compact('pago', 'esVer'));
     }
 
     /**
@@ -58,9 +77,9 @@ class PagoController extends Controller
      */
     public function edit(Pago $pago)
     {
-        $clientes = Cliente::all();
-
-        return Inertia::render('Pago/Edit', compact('pago', 'clientes'));
+        $pago->load('servicios');
+        $esConfirmar = true;
+        return Inertia::render('Pago/Create', compact('pago', 'esConfirmar'));
     }
 
 

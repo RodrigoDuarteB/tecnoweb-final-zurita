@@ -4,15 +4,15 @@
             <div class="grid grid-cols-2 gap-4">
                 <div class="w-full" v-if="esVer">
                     <InputLabel value="Fecha Hora Pago"/>
-                    <TextInput v-model="form.fecha_hora" class="mt-1 block w-full" :disabled="true" type="date"/>
+                    <TextInput v-model="form.fecha_hora" class="mt-1 block w-full" :disabled="true" />
                 </div>
 
                 <div class="w-full" v-if="esVer">
                     <InputLabel value="Fecha Hora Confirmacion"/>
-                    <TextInput v-model="form.fecha_hora_confirmacion" class="mt-1 block w-full" :disabled="true" type="date"/>
+                    <TextInput v-model="form.fecha_hora_confirmacion" class="mt-1 block w-full" :disabled="true" />
                 </div>
 
-                <div class="w-full">
+                <div class="w-full" v-if="esVer">
                     <InputLabel value="Estado"/>
                     <TextInput v-model="form.estado" class="mt-1 block w-full" :disabled="true"/>
                 </div>
@@ -21,9 +21,7 @@
             <div class="flex flex-col mt-2 gap-3">
                 <InputError :message="errors.servicios"/>
                 <div class="my-2" v-if="!esVer">
-                    <InputLabel value="Añadir Servicios"/>
-                    <SelectAdd :items="getServiciosItems()" @selected="handleAddServicio" button-label="Añadir Servicios al Pago" class="w-full"/>
-                    <AutcompletarServicios @select="(val) => console.log(val)"/>
+                    <AutcompletarServicios @select="handleAddServicio"/>
                 </div>
                 <span class="font-semibold text-[1rem] border-b border-b-gray-400">
                     Servicios del Pago
@@ -34,28 +32,47 @@
                         <tr class="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
                             <th class="py-3 px-6 text-center">Id</th>
                             <th class="py-3 px-6 text-center">Nombre</th>
-                            <th class="py-3 px-6 text-center">Costo</th>
-                            <th class="py-3 px-6 text-center">Descuento</th>
+                            <th class="py-3 px-6 text-center">Cantidad</th>
+                            <th class="py-3 px-6 text-center">Costo p/u</th>
+                            <th class="py-3 px-6 text-center">Descuento p/u</th>
+                            <th class="py-3 px-6 text-center">Total Descuento</th>
                             <th class="py-3 px-6 text-center">Subtotal</th>
                             <th class="py-3 px-6 text-center" v-if="!esVer">Acciones</th>
                         </tr>
                     </thead>
                     <tbody class="text-gray-600 text-sm font-light">
-                        <tr class="border-b border-gray-200 hover:bg-gray-100" v-for="item in form.servicios" :key="item">
+                        <tr class="border-b border-gray-200 hover:bg-gray-100" v-for="(item, index) in form.servicios" :key="item">
                             <td class="py-3 px-6 text-center whitespace-nowrap">
                                 {{ item.id }}
                             </td>
                             <td class="py-3 px-6 text-center whitespace-nowrap">
                                 {{ item.nombre }}
                             </td>
-                            <td class="py-3 px-6 text-center whitespace-nowrap">
-                                {{ item.precio }}
+                            <td class="py-3 px-6 whitespace-nowrap">
+                                <div v-if="!esVer" class="flex gap-2 items-center justify-center">
+                                    <button @click="handleChangeCantidad({ index, type: '-' })" type="button" class="px-2 py-1 bg-blue-400 rounded-md font-semibold text-[1rem]">
+                                        -
+                                    </button>
+                                    <span>{{ item.cantidad }}</span>
+                                    <button @click="handleChangeCantidad({ index, type: '+' })" type="button" class="px-2 py-1 bg-blue-400 rounded-md font-semibold text-[1rem]">
+                                        +
+                                    </button>
+                                </div>
+                                <div v-else class="text-center">
+                                    {{ item.cantidad }}
+                                </div>
                             </td>
                             <td class="py-3 px-6 text-center whitespace-nowrap">
-                                {{ item.descuento }}
+                                {{ numberFormat.format(item.precio) }}
                             </td>
                             <td class="py-3 px-6 text-center whitespace-nowrap">
-                                {{ item.subtotal }}
+                                {{ item.monto_descuento ? numberFormat.format(item.monto_descuento) : '-' }}
+                            </td>
+                            <td class="py-3 px-6 text-center whitespace-nowrap">
+                                {{ item.total_descuento ? numberFormat.format(item.total_descuento) : '-' }}
+                            </td>
+                            <td class="py-3 px-6 text-center whitespace-nowrap">
+                                {{ numberFormat.format(item.subtotal) }}
                             </td>
                             <td class="py-3 px-6 text-center" v-if="!esVer">
                                 <div class="flex item-center justify-center">
@@ -65,6 +82,18 @@
                                     />
                                 </div>
                             </td>
+                        </tr>
+                        <tr class="border-b border-gray-200 hover:bg-gray-100">
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td class="py-3 px-6 text-center whitespace-nowrap font-semibold">
+                                Total {{ numberFormat.format(getSubtotal()) }}
+                            </td>
+                            <td></td>
                         </tr>
                     </tbody>
                 </table>
@@ -86,13 +115,12 @@ import TextInput from '@/Components/TextInput.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import EliminarButton from '@/Components/EliminarButton.vue';
 import { hideLoading, showLoading } from '@/state';
-import SelectAdd from '@/Components/SelectAdd.vue';
-import axios from 'axios';
 import AutcompletarServicios from '@/Components/AutcompletarServicios.vue';
+import { ourParseFloat } from '@/utils';
 
-    const props = defineProps(['errors', 'pago', 'servicios', 'esVer']);
+    const props = defineProps(['errors', 'pago', 'servicios', 'esVer', 'esConfirmar']);
     const pago = props.pago
-    const disabled = props.esVer ? true : false
+    const numberFormat = Intl.NumberFormat('es-BO', {maximumFractionDigits: 2})
 
     function getTitulo() {
         if(pago) {
@@ -101,11 +129,20 @@ import AutcompletarServicios from '@/Components/AutcompletarServicios.vue';
         return 'Registrar Pago'
     }
 
-    function getServiciosItems() {
-        return props.servicios?.map(servicio => ({
-            label: servicio.nombre,
-            value: servicio.id
-        }))
+    function getServicios() {
+        if(pago) {
+            return pago.servicios.map(serv => {
+                const pivote = serv.pivot
+                return {
+                    ...serv,
+                    cantidad: pivote.cantidad,
+                    monto_descuento: pivote.monto_descuento,
+                    total_descuento: pivote.total_descuento,
+                    subtotal: pivote.subtotal
+                }
+            })
+        }
+        return []
     }
 
     const form = useForm({
@@ -113,26 +150,34 @@ import AutcompletarServicios from '@/Components/AutcompletarServicios.vue';
         fecha_hora: pago?.fecha_hora ?? '',
         fecha_hora_confirmacion: pago?.fecha_hora ?? '',
         estado: pago?.estado ?? 'Pendiente',
-        servicios: pago?.servicios ?? []
+        servicios: getServicios()
     });
 
     function prepareToSend(data) {
         return {
             ...data,
-            servicios: data.servicios.map(serv => serv.id)
+            servicios: data.servicios.map(serv => ({
+                servicio_id: serv.id,
+                monto_servicio: serv.precio,
+                monto_descuento: serv.monto_descuento,
+                porcentaje_descuento: serv.descuento?.porcentaje,
+                subtotal: serv.subtotal,
+                cantidad: serv.cantidad,
+                total_descuento: serv.total_descuento
+            }))
         }
     }
 
     const submit = () => {
         showLoading()
-        if(descuento?.id) {
-            form.transform(prepareToSend).put(route('descuento.update', { id: descuento.id }), {
+        if(pago?.id) {
+            form.transform(prepareToSend).put(route('pago.update', { id: pago.id }), {
                 onFinish() {
                     hideLoading()
                 }
             })
         } else {
-            form.transform(prepareToSend).post(route('descuento.store'), {
+            form.transform(prepareToSend).post(route('pago.store'), {
                 onFinish() {
                     hideLoading()
                 }
@@ -140,33 +185,40 @@ import AutcompletarServicios from '@/Components/AutcompletarServicios.vue';
         }
     }
 
-    function handleAddServicio(id) {
-        if(id) {
-            if(form.servicios.find(serv => serv.id == id)) {
-                return alert('Servicio ya Añadido!')
-            }
-            const servicio = props.servicios.find(serv => serv.id == id)
-            if(servicio) {
-                form.servicios.push(servicio)
-            }
-        }
+    function handleAddServicio(item) {
+        if(form.servicios.find(serv => serv.id == item.id)) return alert('Servicio ya añadido')
+        form.servicios.push({
+            ...item,
+            cantidad: 1,
+            nombre: item.nombre.split('/')[0].trim()
+        })
     }
 
     function handleDeleteServicio(index) {
         form.servicios.splice(index, 1)
     }
 
-    const formBuscar = useForm({
-        termino: ''
-    })
+    function getSubtotal() {
+        return form.servicios.reduce((acc, item) => acc + ourParseFloat(item.subtotal), 0)
+    }
 
-    async function handleBuscar() {
-        const res = await axios.get('/api/servicio/buscar', {
-            params: {
-                termino: formBuscar.termino
-            }
-        })
-        console.log(res.data);
+    function handleChangeCantidad({ index, type }) {
+        const item = form.servicios[index]
+        if(type == '-' && item.cantidad > 1) {
+            item.cantidad--
+        } else if(type == '+') {
+            item.cantidad++
+        }
+        setearTotalDescuentoYSubtotal(item)
+    }
+
+    function setearTotalDescuentoYSubtotal(item) {
+        if(item.descuento && item.monto_descuento) {
+            item.total_descuento = item.monto_descuento * item.cantidad
+            item.subtotal = (item.precio - item.monto_descuento) * item.cantidad
+        } else {
+            item.subtotal = item.precio * item.cantidad
+        }
     }
 
 </script>
