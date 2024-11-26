@@ -13,16 +13,15 @@ use Inertia\Inertia;
 class ServicioController extends Controller
 {
 
+
+
     public function index()
-    {
+{
+    $items = Servicio::activos()->get();
 
-        $servicios = Servicio::with('usuario')
-            ->orderBy('id')
-            ->paginate(10)
-            ->appends(request()->except("page"));
+    return Inertia::render('Servicio/Index', compact('items'));
+}
 
-        return Inertia::render('Servicio/Index', compact('servicios'));
-    }
 
 
     public function create()
@@ -33,6 +32,7 @@ class ServicioController extends Controller
 
     public function store(Request $request)
     {
+        
         // Validar los datos del formulario
         $validated = $request->validate([
             'nombre' => 'required|string|max:255',
@@ -51,10 +51,9 @@ class ServicioController extends Controller
 
     public function show(Servicio $servicio)
     {
-
-        $servicio->load(['usuario', 'servicioDescuentos', 'servicioPagos']);
-
-        return Inertia::render('Servicio/Show', compact('servicio'));
+        $servicio->load(['usuario']);
+        $esVer = true;
+        return Inertia::render('Servicio/Create', compact('servicio','esVer'));
     }
 
 
@@ -62,18 +61,18 @@ class ServicioController extends Controller
     {
         $usuarios = User::all();
 
-        return Inertia::render('Servicio/Edit', compact('servicio', 'usuarios'));
+        return Inertia::render('Servicio/Create', compact('servicio'));
     }
 
 
     public function update(Request $request, Servicio $servicio)
     {
+       
         // Validar los datos del formulario
         $validated = $request->validate([
             'nombre' => 'required|string|max:255',
             'precio' => 'required|numeric|min:0',
-            'estado' => 'required|boolean',
-            'usuario_id' => 'required|exists:users,id'
+           
         ]);
 
 
@@ -82,15 +81,22 @@ class ServicioController extends Controller
         return redirect()->route('servicio.index')->with('success', 'Servicio actualizado con éxito.');
     }
 
-
     public function destroy(Servicio $servicio)
     {
-
-        $servicio->delete();
-
-
-        return redirect()->route('servicio.index')->with('success', 'Servicio eliminado con éxito.');
+        // Marcar el servicio como inactivo en la sesión (sin cambiar la base de datos)
+        session()->put('servicio_inactivo', $servicio->id);
+    
+        // Mensaje de éxito
+        session()->flash('jetstream.flash', [
+            'banner' =>  'eliminado corretamente!',
+            'bannerStyle' => 'success'
+        ]);
+    
+        // Redirigir de vuelta a la lista de servicios
+        return redirect()->route('servicio.index');
     }
+    
+    
 
     public function buscar(Request $request) {
         $termino = $request->input('termino');

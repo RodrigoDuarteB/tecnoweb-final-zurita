@@ -6,7 +6,8 @@ use App\Models\Reclamo;
 use App\Models\Cliente;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
-
+use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 class ReclamoController extends Controller
 {
     /**
@@ -14,8 +15,9 @@ class ReclamoController extends Controller
      */
     public function index()
     {
-        $reclamos = Reclamo::with('cliente')->orderBy('id')->paginate(10)->appends(request()->except("page"));
-        return Inertia::render('Reclamo/Index', compact('reclamos'));
+        $items = Reclamo::with('cliente')->get(); 
+
+        return Inertia::render('Reclamo/Index', compact('items'));
     }
 
     /**
@@ -26,21 +28,32 @@ class ReclamoController extends Controller
         return Inertia::render('Reclamo/Create');
     }
 
-    /**
-     * Guardar un nuevo reclamo.
-     */
+
     public function store(Request $request)
     {
+        // Validar los datos recibidos
         $validated = $request->validate([
             'reclamo' => 'required|string|max:500'
         ]);
 
+        // Obtener el cliente del usuario autenticado correctamente
+        $cliente = auth()->user()->cliente;  // No necesitas paréntesis, ya que 'cliente' es una relación
+
+        // Verificar que el cliente exista
+        if (!$cliente) {
+            return redirect()->route('reclamo.index')->with('error', 'No se encontró un cliente asociado al usuario.');
+        }
+
+        // Crear el reclamo y asociarlo al cliente
         Reclamo::create([
-            ...$validated,
-            'cliente_id' => auth()->user()->cliente()->id, // Asignar el cliente al reclamo.
+            'reclamo' => $validated['reclamo'],  // Asignar el reclamo
+            'cliente_id' => $cliente->id,        // Asignar el cliente al reclamo
         ]);
+
+        // Redirigir con éxito
         return redirect()->route('reclamo.index')->with('success', 'Reclamo creado con éxito.');
     }
+
 
     /**
      * Mostrar un reclamo específico.
@@ -48,22 +61,21 @@ class ReclamoController extends Controller
     public function show(Reclamo $reclamo)
     {
         $reclamo->load('cliente'); // Cargar
-        return Inertia::render('Reclamo/Show', compact('reclamo'));
+        $esVer = true;
+        return Inertia::render('Reclamo/Create', compact('reclamo','esVer'));
     }
 
 
     public function edit(Reclamo $reclamo)
     {
         $clientes = Cliente::all();
-        return Inertia::render('Reclamo/Edit', compact('reclamo', 'clientes'));
+        return Inertia::render('Reclamo/Create', compact('reclamo'));
     }
 
     public function update(Request $request, Reclamo $reclamo)
     {
         $validated = $request->validate([
-            'descripcion' => 'required|string|max:500',
-            'estado' => 'required|in:pendiente,resuelto',
-            'cliente_id' => 'required|exists:clientes,id',
+            'reclamo' => 'required|string|max:500',
         ]);
 
         $reclamo->update($validated);

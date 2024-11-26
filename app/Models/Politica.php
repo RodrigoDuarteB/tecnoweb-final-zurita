@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use App\Traits\Modelo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Politica extends Model
 {
     use HasFactory;
+    use Modelo;
 
     /**
      * 
