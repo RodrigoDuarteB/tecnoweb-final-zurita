@@ -12,7 +12,7 @@
                     <TextInput v-model="form.fecha_hora_confirmacion" class="mt-1 block w-full" :disabled="true" />
                 </div>
 
-                <div class="w-full" v-if="esVer">
+                <div class="w-full" v-if="esVer || esConfirmar">
                     <InputLabel value="Estado"/>
                     <TextInput v-model="form.estado" class="mt-1 block w-full" :disabled="true"/>
                 </div>
@@ -99,8 +99,12 @@
                 </table>
             </div>
 
-            <div v-if="esConfirmar">
-                Confirmar Pago
+            <div v-if="esConfirmar" class="flex flex-col items-center">
+                <spam class="text-[1.2rem]">Para confirmar debes escanear el qr con el banco de tu preferencia y confirmar una vez pagado</spam>
+                <img src="https://upload.wikimedia.org/wikipedia/commons/d/d7/Commons_QR_code.png" width="300"/>
+                <PrimaryButton type="submit" class="mt-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
+                    Confirmar
+                </PrimaryButton>
             </div>
 
             <PrimaryButton v-if="editable" type="submit" class="mt-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
@@ -153,7 +157,7 @@ import { ourParseFloat } from '@/utils';
     const form = useForm({
         id: pago?.id ?? null,
         fecha_hora: pago?.fecha_hora ?? '',
-        fecha_hora_confirmacion: pago?.fecha_hora ?? '',
+        fecha_hora_confirmacion: pago?.fecha_hora_confirmacion ?? '',
         estado: pago?.estado ?? 'Pendiente',
         servicios: getServicios()
     });
@@ -176,7 +180,7 @@ import { ourParseFloat } from '@/utils';
     const submit = () => {
         showLoading()
         if(pago?.id) {
-            form.transform(prepareToSend).put(route('pago.update', { id: pago.id }), {
+            form.put(route('pago.update', { id: pago.id }), {
                 onFinish() {
                     hideLoading()
                 }

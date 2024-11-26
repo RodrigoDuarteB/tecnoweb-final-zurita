@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\PagoUpdateRequest;
 use App\Models\Pago;
 use App\Models\Cliente;
 use Carbon\Carbon;
@@ -90,19 +91,28 @@ class PagoController extends Controller
     /**
      * Actualizar un pago existente.
      */
-    public function update(Request $request, Pago $pago)
+    public function update(PagoUpdateRequest $request, Pago $pago)
     {
-        $validated = $request->validate([
-            'fecha_hora' => 'required|date',
-            'fecha_hora_confirmacion' => 'nullable|date',
-            'qr_imagen' => 'nullable|string|max:255',
-            'cliente_id' => 'required|exists:clientes,id',
-            'estado' => 'required|string|max:255',
-        ]);
-
-        $pago->update($validated);
-
-        return redirect()->route('pago.index')->with('success', 'Pago actualizado con éxito.');
+        DB::beginTransaction();
+        try {
+            $pago->update([
+                'estado' => 'Confirmado',
+                'fecha_hora_confirmacion' => Carbon::now()
+            ]);
+            DB::commit();
+            session()->flash('jetstream.flash', [
+                'banner' => 'Pago Confirmado corretamente!',
+                'bannerStyle' => 'success'
+            ]);
+            return redirect()->route('pago.index');
+        } catch (Exception $e) {
+            DB::rollBack();
+            session()->flash('jetstream.flash', [
+                'banner' => 'Hubo un error al confirmar el Pago!',
+                'bannerStyle' => 'error'
+            ]);
+            return redirect()->route('pago.index');
+        }
     }
 
     /**
