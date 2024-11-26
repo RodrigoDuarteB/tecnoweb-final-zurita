@@ -99,7 +99,7 @@
                 </table>
             </div>
 
-            <div v-if="esConfirmar" class="flex flex-col items-center">
+            <div v-if="esConfirmar && pago?.estado == 'Pendiente'" class="flex flex-col items-center">
                 <spam class="text-[1.2rem]">Para confirmar debes escanear el qr con el banco de tu preferencia y confirmar una vez pagado</spam>
                 <img src="https://upload.wikimedia.org/wikipedia/commons/d/d7/Commons_QR_code.png" width="300"/>
                 <PrimaryButton type="submit" class="mt-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
