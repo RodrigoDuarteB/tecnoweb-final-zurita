@@ -3,7 +3,7 @@
         <form @submit.prevent="submit" class="flex gap-3 items-center">
             <div class="my-2">
                 <InputLabel value="Cliente"/>
-                <Select :items="getClientes()" v-model="datos.cliente_id"/>
+                <Select :items="getClientes()" v-model="datos.cliente_id" required/>
             </div>
 
             <div class="w-full">
@@ -21,8 +21,47 @@
             </PrimaryButton>
         </form>
 
-        <div v-if="items">
-
+        <div v-if="items" class="flex flex-col gap-3 mt-3">
+            <span>Resultados</span>
+            <table class="min-w-max w-full table-auto">
+                <thead>
+                    <tr class="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+                        <th class="py-3 px-6 text-center">Id</th>
+                        <th class="py-3 px-6 text-center">Cliente</th>
+                        <th class="py-3 px-6 text-center">Fecha Hora</th>
+                        <th class="py-3 px-6 text-center">Fecha Hora Confirmación </th>
+                        <th class="py-3 px-6 text-center">Servicios</th>
+                        <th class="py-3 px-6 text-center">Total Descuento</th>
+                        <th class="py-3 px-6 text-center">Total</th>
+                    </tr>
+                </thead>
+                <tbody class="text-gray-600 text-sm font-light">
+                    <tr class="border-b border-gray-200 hover:bg-gray-100" v-for="item in items" :key="item">
+                        <td class="py-3 px-6 text-center whitespace-nowrap">
+                            {{ item.id }}
+                        </td>
+                        <td class="py-3 px-6 text-center whitespace-nowrap">
+                            {{ item.cliente }}
+                        </td>
+                        <td class="py-3 px-6 text-center whitespace-nowrap">
+                            {{ item.fecha_hora }}
+                        </td>
+                        <td class="py-3 px-6 text-center whitespace-nowrap">
+                            {{ item.fecha_hora_confirmacion }}
+                        </td>
+                        <td class="py-3 px-6 text-center whitespace-nowrap">
+                            {{ item.servicios }}
+                        </td>
+                        <td class="py-3 px-6 text-center whitespace-nowrap">
+                            {{ item.total_descuento }}
+                        </td>
+                        <td class="py-3 px-6 text-center whitespace-nowrap">
+                            {{ item.total }}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <span v-if="!items.length" class="text-center">No hay Datos para Mostrar</span>
         </div>
     </ManagmentLayout>
 </template>
@@ -56,13 +95,14 @@ import { ref } from 'vue';
     }
 
     function submit() {
-        console.log(datos.data())
+        if(new Date(datos.fecha_fin) < new Date(datos.fecha_inicio)) return alert("La fecha inicio debe ser menor o igual a la fecha fin")
+        items.value = null
         showLoading()
         axios.get('/api/reporte/pagosPorCliente', {
             params: datos.data()
         })
         .then(res => {
-            console.log(res.data)
+            items.value = res.data
         })
         .finally(() => {
             hideLoading()

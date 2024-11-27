@@ -3,14 +3,14 @@
         <div>
             <div class="text-white">
                 <div class="flex p-2">
-                    <a class="flex flex-col py-3 px-2 items-center" href="">
+                    <Link class="flex flex-col py-3 px-2 items-center" :href="route('dashboard')">
                         <p :class="['text-2xl font-semibold', $page.props.styles.titulo]">
                             Gobernacion
                         </p>
                         <p :class="['ml-2 font-semibold italic', $page.props.styles.textos]">
                             Rurrenabaque
                         </p>
-                    </a>
+                    </Link>
                 </div>
                 <div class="flex justify-center">
                     <div class="">
@@ -29,6 +29,7 @@
 </template>
 
 <script setup>
+import { Link } from '@inertiajs/vue3';
 import MenuItem from './MenuItem.vue';
 </script>
 
