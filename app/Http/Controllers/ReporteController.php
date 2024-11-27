@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cliente;
+use App\Models\ContadorPagina;
 use App\Models\Servicio;
 use Carbon\Carbon;
 use DB;
@@ -13,7 +14,10 @@ class ReporteController extends Controller
 {
 
     public function index() {
-        return Inertia::render('Reporte/Index');
+        $contadores = ContadorPagina::orderByDesc('conteo')
+        ->limit(3)
+        ->get();
+        return Inertia::render('Reporte/Index', compact('contadores'));
     }
 
     public function pagosCliente() {

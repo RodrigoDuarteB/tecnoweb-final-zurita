@@ -137,4 +137,12 @@ class MenuController extends Controller
                 ->with('error', 'Hubo un error al guardar el rol: '. $e->getMessage());
         }
     }
+
+    public function buscar(Request $request) {
+        $menus = Menu::activos()
+        ->with('acciones')
+        ->whereRaw("LOWER(nombre) LIKE '%?%'", [strtolower($request->termino)])
+        ->get();
+        return response()->json($menus);
+    }
 }

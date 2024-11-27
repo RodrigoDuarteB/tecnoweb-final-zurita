@@ -15,7 +15,7 @@ class ContadorPagina extends Model
 
     public static function contar() {
         $ruta = Request::path();
-        if($ruta !== '/') {
+        if($ruta !== '/' && $ruta !== 'login' && $ruta !== 'logout' && !str_contains($ruta, 'api/')) {
             $obj = self::firstOrCreate(['ruta' => $ruta]);
             $obj->increment('conteo');
             return $obj->conteo;
