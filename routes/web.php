@@ -11,6 +11,7 @@ use App\Http\Controllers\MenuController;
 use App\Http\Controllers\PagoController;
 use App\Http\Controllers\PoliticaController;
 use App\Http\Controllers\ReclamoController;
+use App\Http\Controllers\ReporteController;
 use App\Http\Controllers\RolController;
 use App\Http\Controllers\ServicioController;
 
@@ -41,4 +42,8 @@ Route::middleware([
     Route::resource('descuento', DescuentoController::class);
     Route::resource('pago', PagoController::class);
     Route::get('pago/{pago}/confirmar', [PagoController::class, 'confirmar'])->name('pago.confirmar');
+    Route::get('reportes', [ReporteController::class, 'index'])->name('reporte.index');
+    Route::get('reporte/pagosPorCliente', [ReporteController::class, 'pagosCliente'])->name('reporte.pagosPorCliente');
+    Route::get('reporte/pagosPorServicio', [ReporteController::class, 'pagosServicio'])->name('reporte.pagosPorServicio');
+    Route::get('reporte/totalPagos', [ReporteController::class, 'total'])->name('reporte.totalPagos');
 });
