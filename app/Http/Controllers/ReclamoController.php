@@ -3,11 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Reclamo;
-use App\Models\Cliente;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
-use Illuminate\Support\Facades\Auth;
-use App\Models\User;
+
 class ReclamoController extends Controller
 {
     /**
@@ -15,7 +13,13 @@ class ReclamoController extends Controller
      */
     public function index()
     {
-        $items = Reclamo::with('cliente')->get(); 
+        $items = Reclamo::activos()->with('cliente.usuario');
+
+        $cliente = auth()->user()->cliente;
+        if($cliente) {
+            $items->where('cliente_id', $cliente->id);
+        }
+        $items = $items->get();
 
         return Inertia::render('Reclamo/Index', compact('items'));
     }
@@ -50,6 +54,11 @@ class ReclamoController extends Controller
             'cliente_id' => $cliente->id,        // Asignar el cliente al reclamo
         ]);
 
+        session()->flash('jetstream.flash', [
+            'banner' => 'Reclamo creado corretamente!',
+            'bannerStyle' => 'success'
+        ]);
+
         // Redirigir con éxito
         return redirect()->route('reclamo.index')->with('success', 'Reclamo creado con éxito.');
     }
@@ -60,7 +69,6 @@ class ReclamoController extends Controller
      */
     public function show(Reclamo $reclamo)
     {
-        $reclamo->load('cliente'); // Cargar
         $esVer = true;
         return Inertia::render('Reclamo/Create', compact('reclamo','esVer'));
     }
@@ -68,7 +76,6 @@ class ReclamoController extends Controller
 
     public function edit(Reclamo $reclamo)
     {
-        $clientes = Cliente::all();
         return Inertia::render('Reclamo/Create', compact('reclamo'));
     }
 
@@ -79,13 +86,23 @@ class ReclamoController extends Controller
         ]);
 
         $reclamo->update($validated);
+        session()->flash('jetstream.flash', [
+            'banner' => 'Reclamo Editado corretamente!',
+            'bannerStyle' => 'success'
+        ]);
         return redirect()->route('reclamo.index')->with('success', 'Reclamo actualizado con éxito.');
     }
 
 
     public function destroy(Reclamo $reclamo)
     {
-        $reclamo->delete();
-        return redirect()->route('reclamo.index')->with('success', 'Reclamo eliminado con éxito.');
+        $reclamo->update([
+            'estado' => 'Inactivo'
+        ]);
+        session()->flash('jetstream.flash', [
+            'banner' => 'Reclamo eliminado corretamente!',
+            'bannerStyle' => 'success'
+        ]);
+        return redirect()->route('reclamo.index');
     }
 }

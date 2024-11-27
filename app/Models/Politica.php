@@ -12,23 +12,16 @@ class Politica extends Model
     use Modelo;
 
     /**
-     * 
+     *
      */
     protected $table = 'politica';
 
-   
+
     protected $fillable = [
         'nombre',
         'descripcion',
         'usuario_id',
         'estado',
-    ];
-
-    /**
-     * Casts para atributos.
-     */
-    protected $casts = [
-        'estado' => 'boolean',
     ];
 
     /**

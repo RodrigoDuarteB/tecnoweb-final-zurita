@@ -61,6 +61,7 @@
 <script setup>
 import { ref } from 'vue';
 import { Link, router } from '@inertiajs/vue3'
+import { hideLoading, showLoading } from '@/state';
 
     const opened = ref(false)
 
@@ -69,7 +70,12 @@ import { Link, router } from '@inertiajs/vue3'
     }
 
     const logout = () => {
-        router.post(route('logout'));
+        showLoading()
+        router.post(route('logout'), null, {
+            onFinish() {
+                hideLoading()
+            }
+        });
     };
 </script>
 

@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\PagoUpdateRequest;
 use App\Models\Pago;
-use App\Models\Cliente;
 use Carbon\Carbon;
 use DB;
 use Exception;
@@ -56,12 +55,14 @@ class PagoController extends Controller
                 'banner' => 'Pago creado corretamente!',
                 'bannerStyle' => 'success'
             ]);
-            return redirect()->route('pago.index');
+            return redirect()->route('pago.confirmar', [
+                'pago' => $pago
+            ]);
         } catch (Exception $e) {
             DB::rollBack();
             session()->flash('jetstream.flash', [
                 'banner' => 'Hubo un error al crear el Pago!',
-                'bannerStyle' => 'error'
+                'bannerStyle' => 'danger'
             ]);
             return redirect()->route('pago.index');
         }
@@ -82,6 +83,13 @@ class PagoController extends Controller
      */
     public function edit(Pago $pago)
     {
+        if($pago->estado != 'Pendiente') {
+            session()->flash('jetstream.flash', [
+                'banner' => 'Solo se puede confirmar un pago Pendiente!',
+                'bannerStyle' => 'danger'
+            ]);
+            return redirect()->route('pago.index');
+        }
         $pago->load('servicios');
         $esConfirmar = true;
         return Inertia::render('Pago/Create', compact('pago', 'esConfirmar'));
@@ -109,7 +117,7 @@ class PagoController extends Controller
             DB::rollBack();
             session()->flash('jetstream.flash', [
                 'banner' => 'Hubo un error al confirmar el Pago!',
-                'bannerStyle' => 'error'
+                'bannerStyle' => 'danger'
             ]);
             return redirect()->route('pago.index');
         }
@@ -120,8 +128,36 @@ class PagoController extends Controller
      */
     public function destroy(Pago $pago)
     {
-        $pago->delete();
+        DB::beginTransaction();
+        try {
+            $pago->update([
+                'estado' => 'Inactivo'
+            ]);
+            DB::commit();
+            session()->flash('jetstream.flash', [
+                'banner' => 'Pago Eliminado corretamente!',
+                'bannerStyle' => 'success'
+            ]);
+            return redirect()->route('pago.index');
+        } catch (Exception $e) {
+            DB::rollBack();
+            session()->flash('jetstream.flash', [
+                'banner' => 'Hubo un error al eliminar el Pago!',
+                'bannerStyle' => 'error'
+            ]);
+            return redirect()->route('pago.index');
+        }
+    }
 
-        return redirect()->route('pago.index')->with('success', 'Pago eliminado con éxito.');
+    public function confirmar(Pago $pago) {
+        if($pago->estado != 'Pendiente') {
+            session()->flash('jetstream.flash', [
+                'banner' => 'Solo se puede confirmar un pago Pendiente!',
+                'bannerStyle' => 'danger'
+            ]);
+            return redirect()->route('pago.index');
+        }
+        $pago->load('servicios');
+        return Inertia::render('Pago/Confirmar', compact('pago'));
     }
 }

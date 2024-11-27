@@ -30,7 +30,7 @@
                                 <EditarButton :href="route('servicio.edit', { id: item.id })" />
                             </AuthPermission>
 
-                            <AuthPermission menu="Gestionar Menu" accion="Eliminar">
+                            <AuthPermission menu="Gestionar Servicios" accion="Eliminar">
                                 <EliminarButton @click="confirmDeleteItem(item.id)"/>
                             </AuthPermission>
                         </div>

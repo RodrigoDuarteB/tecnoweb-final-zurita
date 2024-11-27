@@ -5,7 +5,7 @@
                 <div class="w-full">
                     <InputLabel for="reclamo" value="Reclamo"/>
                     <InputError :message="errors.reclamo"/>
-                    <textarea class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm w-full" v-model="form.reclamo" :disabled="disabled"></textarea>
+                    <textarea class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm w-full" v-model="form.reclamo" :disabled="disabled" required></textarea>
                 </div>
         </div>
 
@@ -43,7 +43,7 @@ import { hideLoading, showLoading } from '@/state';
     const submit = () => {
         showLoading()
         if(reclamo?.id) {
-            form.put(route('reclamo.update', { id: menu.id }), {
+            form.put(route('reclamo.update', { id: reclamo.id }), {
                 onFinish() {
                     hideLoading()
                 }

@@ -4,26 +4,35 @@ import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
+import Loading from '@/Components/Loading.vue';
+import { ref } from 'vue';
 
-defineProps({
-    canResetPassword: Boolean,
-    status: String,
-});
-
-const form = useForm({
-    email: '',
-    password: '',
-    remember: false,
-});
-
-const submit = () => {
-    form.transform(data => ({
-        ...data,
-        remember: form.remember ? 'on' : '',
-    })).post(route('login'), {
-        onFinish: () => form.reset('password'),
+    defineProps({
+        canResetPassword: Boolean,
+        status: String,
     });
-};
+
+    const form = useForm({
+        email: '',
+        password: '',
+        remember: false,
+    });
+
+    const loading = ref(false)
+
+
+    const submit = () => {
+        loading.value = true
+        form.transform(data => ({
+            ...data,
+            remember: form.remember ? 'on' : '',
+        })).post(route('login'), {
+            onFinish: () => {
+                form.reset('password')
+                loading.value = false
+            },
+        });
+    };
 </script>
 
 <template>
@@ -92,5 +101,6 @@ const submit = () => {
                 </div>
             </div>
         </section>
+        <Loading :is-visible="loading"/>
     </div>
 </template>

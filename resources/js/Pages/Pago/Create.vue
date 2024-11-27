@@ -178,6 +178,7 @@ import { ourParseFloat } from '@/utils';
     }
 
     const submit = () => {
+        if(!form.servicios.length) return alert('Debe agregar almenos un servicio!')
         showLoading()
         if(pago?.id) {
             form.put(route('pago.update', { id: pago.id }), {

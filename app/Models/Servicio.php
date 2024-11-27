@@ -26,12 +26,7 @@ class Servicio extends Model
         'usuario_id',
     ];
 
-    /**
-     * Casts para atributos.
-     */
-    protected $casts = [
-        'estado' => 'boolean',
-    ];
+
     public function descuentos()
     {
         return $this->belongsToMany(Descuento::class, 'servicio_descuento');

@@ -3,9 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Servicio;
-use App\Models\User;
 use Carbon\Carbon;
-use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -16,11 +14,11 @@ class ServicioController extends Controller
 
 
     public function index()
-{
-    $items = Servicio::activos()->get();
+    {
+        $items = Servicio::activos()->get();
 
-    return Inertia::render('Servicio/Index', compact('items'));
-}
+        return Inertia::render('Servicio/Index', compact('items'));
+    }
 
 
 
@@ -32,11 +30,11 @@ class ServicioController extends Controller
 
     public function store(Request $request)
     {
-        
+
         // Validar los datos del formulario
         $validated = $request->validate([
             'nombre' => 'required|string|max:255',
-            'precio' => 'required|numeric|min:0'
+            'precio' => 'required|numeric|min:1'
         ]);
 
 
@@ -45,8 +43,12 @@ class ServicioController extends Controller
             'usuario_id' => Auth::user()->id
         ]);
 
+        session()->flash('jetstream.flash', [
+            'banner' => 'Servicio Creado corretamente!',
+            'bannerStyle' => 'success'
+        ]);
 
-        return redirect()->route('servicio.index')->with('success', 'Servicio creado con éxito.');
+        return redirect()->route('servicio.index');
     }
 
     public function show(Servicio $servicio)
@@ -59,44 +61,47 @@ class ServicioController extends Controller
 
     public function edit(Servicio $servicio)
     {
-        $usuarios = User::all();
-
         return Inertia::render('Servicio/Create', compact('servicio'));
     }
 
 
     public function update(Request $request, Servicio $servicio)
     {
-       
+
         // Validar los datos del formulario
         $validated = $request->validate([
             'nombre' => 'required|string|max:255',
             'precio' => 'required|numeric|min:0',
-           
+
         ]);
 
 
         $servicio->update($validated);
+        session()->flash('jetstream.flash', [
+            'banner' => 'Servicio Modificado corretamente!',
+            'bannerStyle' => 'success'
+        ]);
 
-        return redirect()->route('servicio.index')->with('success', 'Servicio actualizado con éxito.');
+        return redirect()->route('servicio.index');
     }
 
     public function destroy(Servicio $servicio)
     {
-        // Marcar el servicio como inactivo en la sesión (sin cambiar la base de datos)
-        session()->put('servicio_inactivo', $servicio->id);
-    
+        $servicio->update([
+            'estado' => 'Inactivo'
+        ]);
+
         // Mensaje de éxito
         session()->flash('jetstream.flash', [
-            'banner' =>  'eliminado corretamente!',
+            'banner' =>  'Servicio eliminado corretamente!',
             'bannerStyle' => 'success'
         ]);
-    
+
         // Redirigir de vuelta a la lista de servicios
         return redirect()->route('servicio.index');
     }
-    
-    
+
+
 
     public function buscar(Request $request) {
         $termino = $request->input('termino');

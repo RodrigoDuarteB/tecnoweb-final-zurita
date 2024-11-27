@@ -40,4 +40,5 @@ Route::middleware([
     Route::resource('politica', PoliticaController::class);
     Route::resource('descuento', DescuentoController::class);
     Route::resource('pago', PagoController::class);
+    Route::get('pago/{pago}/confirmar', [PagoController::class, 'confirmar'])->name('pago.confirmar');
 });

@@ -18,7 +18,7 @@
                         {{ item.reclamo }}
                     </td>
                     <td class="py-3 px-6 text-center whitespace-nowrap">
-                        {{ item.cliente.user.name }}
+                        {{ item.cliente.usuario.name }}
                     </td>
                     <td class="py-3 px-6 text-center">
                         <div class="flex item-center justify-center">
