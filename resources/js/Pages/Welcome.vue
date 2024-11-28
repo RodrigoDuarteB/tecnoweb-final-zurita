@@ -46,7 +46,7 @@ function handleImageError() {
 
         <div class="container mx-auto flex flex-col md:flex-row items-center my-12 md:my-24">
             <div class="w-full lg:w-1/2 lg:py-6 text-center">
-                <img src="{{ asset('images/ficct.jpg') }}" alt="" style="opacity: 0.7;">
+                <img src="images/logo.png" alt="" style="opacity: 0.7;">
             </div>
         </div>
 
