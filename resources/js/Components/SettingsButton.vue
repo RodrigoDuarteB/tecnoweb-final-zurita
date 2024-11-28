@@ -1,7 +1,7 @@
 <template>
     <li class="relative">
         <button
-            class="p-2 bg-white {{ config('styles.general.iconos') }} align-middle rounded-full focus:outline-none hover:bg-white" aria-label="Account" aria-haspopup="true" @click="toggleOpen">
+            :class="['p-2 bg-white align-middle rounded-full focus:outline-none hover:bg-white', styles.iconos]" aria-label="Account" aria-haspopup="true" @click="toggleOpen">
             <div class="flex items-center">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
                     viewBox="0 0 24 24" stroke="currentColor">
@@ -13,7 +13,7 @@
             </div>
         </button>
         <div v-show="opened">
-            <ul class="absolute right-0 w-56 p-2 mt-2 space-y-2 text-gray-600 bg-blue-300 border-2 border-gray-900 rounded-md shadow-md"
+            <ul :class="['absolute right-0 w-56 p-2 mt-2 space-y-2 text-gray-600 bg-blue-300 border-2 border-gray-900 rounded-md shadow-md', styles.fondo]"
                 aria-label="submenu">
 
                 <li class="flex">
@@ -62,6 +62,7 @@
 import { ref } from 'vue';
 import { Link, router } from '@inertiajs/vue3'
 import { hideLoading, showLoading } from '@/state';
+import { getTimeStyles } from '@/utils';
 
     const opened = ref(false)
 
@@ -77,6 +78,7 @@ import { hideLoading, showLoading } from '@/state';
             }
         });
     };
+    const styles = getTimeStyles()
 </script>
 
 <style lang="scss" scoped>

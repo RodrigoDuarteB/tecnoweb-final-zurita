@@ -4,6 +4,9 @@ import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
+import Loading from '@/Components/Loading.vue';
+import { ref } from 'vue';
+import { getTimeStyles } from '@/utils';
 
 const form = useForm({
     name: '',
@@ -14,15 +17,22 @@ const form = useForm({
     rol_id: 2 //cliente
 });
 
+const loading = ref(false)
+
 const submit = () => {
+    loading.value = true;
     form.post(route('register'), {
-        onFinish: () => form.reset('password', 'password_confirmation'),
+        onFinish: () => {
+            loading.value = false
+            form.reset('password', 'password_confirmation')
+        }
     });
 };
+const styles = getTimeStyles()
 </script>
 
 <template>
-    <div :class="['h-screen overflow-hidden flex items-center justify-center', $page.props.styles.background]">
+    <div :class="['h-screen overflow-hidden flex items-center justify-center', styles.background]">
         <div class="w-[700px] min-h-screen flex items-center justify-center text-center md:px-16 px-0 z-0 bg-gray-800">
             <div class="w-full py-6 z-20">
                 <p class="text-gray-100 font-semibold text-2xl mb-10">
@@ -96,5 +106,6 @@ const submit = () => {
                 </form>
             </div>
         </div>
+        <Loading :is-visible="loading"/>
     </div>
 </template>

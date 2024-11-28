@@ -140,8 +140,10 @@ class MenuController extends Controller
 
     public function buscar(Request $request) {
         $menus = Menu::activos()
-        ->with('acciones')
-        ->whereRaw("LOWER(nombre) LIKE '%?%'", [strtolower($request->termino)])
+        ->with(['acciones' => function($query) {
+            $query->where('es_menu', true);
+        }])
+        ->whereRaw("LOWER(nombre) LIKE ?", ['%' . strtolower($request->termino) . '%'])
         ->get();
         return response()->json($menus);
     }

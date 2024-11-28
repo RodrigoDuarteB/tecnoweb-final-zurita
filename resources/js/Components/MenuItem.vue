@@ -1,7 +1,7 @@
 <template>
     <li class="relative px-2 py-1">
         <div class="inline-flex items-center justify-between w-full text-base font-semibold transition-colors duration-150 text-gray-500 hover:text-yellow-400 cursor-pointer" @click="toggleOpen">
-            <span :class="['inline-flex items-center text-sm font-semibold', $page.props.styles.textos]">
+            <span :class="['inline-flex items-center text-sm font-semibold', styles.textos]">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
                     viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -9,14 +9,14 @@
                 </svg>
                 <span class="ml-4">{{ menu.menu }}</span>
             </span>
-            <svg xmlns="http://www.w3.org/2000/svg" v-show="!opened" :class="['ml-1 w-4 h-4', $page.props.styles.textos]" fill="none" viewBox="0 0 24 24"
+            <svg xmlns="http://www.w3.org/2000/svg" v-show="!opened" :class="['ml-1 w-4 h-4', styles.textos]" fill="none" viewBox="0 0 24 24"
                 stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                     d="M15 19l-7-7 7-7" />
             </svg>
 
             <svg xmlns="http://www.w3.org/2000/svg" v-show="opened"
-            :class="['ml-1 w-4 h-4', $page.props.styles.textos]" fill="none" viewBox="0 0 24 24"
+            :class="['ml-1 w-4 h-4', styles.textos]" fill="none" viewBox="0 0 24 24"
                 stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                     d="M19 9l-7 7-7-7" />
@@ -24,7 +24,7 @@
         </div>
 
         <div v-if="menu.acciones.length && opened">
-            <ul :class="['p-2 mt-2 space-y-2 overflow-hidden text-sm font-medium rounded-md shadow-inner', $page.props.styles.fondo]" aria-label="submenu">
+            <ul :class="['p-2 mt-2 space-y-2 overflow-hidden text-sm font-medium rounded-md shadow-inner', styles.fondo]" aria-label="submenu">
                 <li class="px-2 py-1 text-white transition-colors duration-150" v-for="(accion, index) in menu.acciones.filter(m => m.es_menu)" :key="index">
                     <NavLink :href="`http://mail.tecnoweb.org.bo/inf513/grupo08sa/proyecto2/public${accion.url}`" :class="['w-full px-1 hover:text-gray-800 hover:bg-gray-100 rounded-md', page.url == accion.url ? '!text-gray-800 !bg-gray-100' : '']">
                         <div class="flex items-center hover:text-gray-800">
@@ -50,6 +50,7 @@
 import { ref } from 'vue';
 import NavLink from './NavLink.vue';
 import { usePage } from '@inertiajs/vue3';
+import { getTimeStyles } from '@/utils';
 
     const page = usePage()
 
@@ -60,6 +61,7 @@ import { usePage } from '@inertiajs/vue3';
     function toggleOpen() {
         opened.value =!opened.value;
     }
+    const styles = getTimeStyles()
 </script>
 
 <style lang="scss" scoped>

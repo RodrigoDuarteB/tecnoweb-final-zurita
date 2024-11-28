@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\MenuController;
 use App\Http\Controllers\ReporteController;
 use App\Http\Controllers\ServicioController;
 use Illuminate\Http\Request;
@@ -13,3 +14,4 @@ Route::get('servicio/buscar', [ServicioController::class, 'buscar'])->name('serv
 Route::get('reporte/pagosPorCliente', [ReporteController::class, 'pagosPorCliente']);
 Route::get('reporte/pagosPorServicio', [ReporteController::class, 'pagosPorServicio']);
 Route::get('reporte/totalPagosYDescuentos', [ReporteController::class, 'totalPagosYDescuentos']);
+Route::get('menu/buscar', [MenuController::class, 'buscar'])->name('menu.buscar');

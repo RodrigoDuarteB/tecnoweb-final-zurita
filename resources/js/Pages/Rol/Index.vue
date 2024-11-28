@@ -63,11 +63,17 @@ import AuthPermission from '@/Components/AuthPermission.vue';
 import VerButton from '@/Components/VerButton.vue';
 import EditarButton from '@/Components/EditarButton.vue';
 import EliminarButton from '@/Components/EliminarButton.vue';
+import { hideLoading, showLoading } from '@/state';
     const props = defineProps(['items'])
 
     const deleteItem = () => {
         if (selectedItem.value) {
-            router.delete(route('rol.destroy', { id: selectedItem.value }))
+            showLoading()
+            router.delete(route('rol.destroy', { id: selectedItem.value }), {
+                onFinish: () => {
+                    hideLoading()
+                }
+            })
             showModal.value = false;
         }
     };

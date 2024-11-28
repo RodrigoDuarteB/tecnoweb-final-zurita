@@ -1,5 +1,5 @@
 <template>
-    <div :class="['flex h-screen w-full', `${$page.props.styles.background}-${tema}`]">
+    <div :class="['flex h-screen w-full', `${styles.background}-${tema}`]">
         <Menu />
 
         <div class="flex flex-col flex-1 w-full">
@@ -31,10 +31,12 @@ import Card from '@/Components/Card.vue';
 import Loading from '@/Components/Loading.vue';
 import { loadingState } from '@/state';
 import Banner from '@/Components/Banner.vue';
+import { getTimeStyles } from '@/utils';
 
     console.log(usePage().props);
     const tema = localStorage.getItem('tema') ?? 'adultos'
     const props = defineProps(['title'])
+    const styles = getTimeStyles()
 </script>
 
 <style lang="scss" scoped>

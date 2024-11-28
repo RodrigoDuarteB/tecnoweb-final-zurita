@@ -25,7 +25,7 @@ class UpdateUserPut extends FormRequest
             'id' => 'required|integer',
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email,'.$this->route("user")->id,
-            'password'  => 'nullable|string|min:8'
+            'password'  => 'nullable|string|min:4'
         ];
     }
 }

@@ -100,15 +100,6 @@ class UserController extends Controller
             }
             $user->update($datos);
             DB::commit();
-            $emailChanged = $user->email !== $request->email;
-            $passwordChanged = !empty($request->password);
-            if ($emailChanged || $passwordChanged) {
-                Auth::logout();
-                $request->session()->invalidate();
-                $request->session()->regenerateToken();
-
-                return redirect()->route('login')->with('message', 'Your email or password has been updated. Please log in again.');
-            }
             session()->flash('jetstream.flash', [
                 'banner' => 'Tu usuario fue modificado corretamente!',
                 'bannerStyle' => 'success'
@@ -116,8 +107,7 @@ class UserController extends Controller
             return redirect()->route('dashboard');
         } catch(Exception $e) {
             DB::rollBack();
-            return redirect()->route('user.index')
-                ->with('error', 'Hubo un error al guardar el rol: '. $e->getMessage());
+            return redirect()->route('user.index');
         }
     }
 

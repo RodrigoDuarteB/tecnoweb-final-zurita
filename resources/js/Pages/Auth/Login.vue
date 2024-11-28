@@ -6,6 +6,7 @@ import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import Loading from '@/Components/Loading.vue';
 import { ref } from 'vue';
+import { getTimeStyles } from '@/utils';
 
     defineProps({
         canResetPassword: Boolean,
@@ -33,10 +34,12 @@ import { ref } from 'vue';
             },
         });
     };
+
+    const styles = getTimeStyles()
 </script>
 
 <template>
-    <div :class="['h-screen overflow-hidden flex items-center justify-center', $page.props.styles.background]">
+    <div :class="['h-screen overflow-hidden flex items-center justify-center', styles.background]">
         <section class="min-h-screen flex items-stretch text-white ">
             <div class="lg:flex w-1/2 hidden bg-gray-500 bg-no-repeat bg-cover relative items-center imagen-login">
                 <div class="absolute bg-black opacity-60 inset-0 z-0"></div>

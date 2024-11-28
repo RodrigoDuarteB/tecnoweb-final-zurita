@@ -75,6 +75,7 @@ class User extends Authenticatable
         ->where('menu.estado', 'Activo')
         ->where('permiso.rol_id', $this->rol_id)
         ->select(
+            'menu.id',
             'menu.nombre as menu',
             'accion.id as accion_id',
             'accion.nombre as accion_nombre',

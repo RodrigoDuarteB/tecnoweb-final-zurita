@@ -23,7 +23,7 @@
                 <div class="w-full" v-if="esEdit">
                     <InputLabel for="password" value="Contraseña"/>
                     <InputError :message="errors.password"/>
-                    <TextInput v-model="form.password" type="password" id="password" class="mt-1 block w-full" :disabled="disabled" min="8"/>
+                    <TextInput v-model="form.password" type="password" id="password" class="mt-1 block w-full" :disabled="disabled" min="4"/>
                 </div>
 
                 <div class="w-full" v-if="esVer && user?.rol_id == 2">
