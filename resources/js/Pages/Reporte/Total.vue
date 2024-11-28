@@ -61,7 +61,7 @@ import { ref } from 'vue';
         if(new Date(datos.fecha_fin) < new Date(datos.fecha_inicio)) return alert("La fecha inicio debe ser menor o igual a la fecha fin")
         items.value = null
         showLoading()
-        axios.get('public/api/reporte/totalPagosYDescuentos', {
+        axios.get('http://mail.tecnoweb.org.bo/inf513/grupo08sa/proyecto2/public/api/reporte/totalPagosYDescuentos', {
             params: datos.data()
         })
         .then(res => {
