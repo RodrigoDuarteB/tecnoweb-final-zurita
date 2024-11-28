@@ -26,7 +26,7 @@
         <div v-if="menu.acciones.length && opened">
             <ul :class="['p-2 mt-2 space-y-2 overflow-hidden text-sm font-medium rounded-md shadow-inner', $page.props.styles.fondo]" aria-label="submenu">
                 <li class="px-2 py-1 text-white transition-colors duration-150" v-for="(accion, index) in menu.acciones.filter(m => m.es_menu)" :key="index">
-                    <NavLink :href="`/public${accion.url}`" :class="['w-full px-1 hover:text-gray-800 hover:bg-gray-100 rounded-md', page.url == accion.url ? '!text-gray-800 !bg-gray-100' : '']">
+                    <NavLink :href="`public${accion.url}`" :class="['w-full px-1 hover:text-gray-800 hover:bg-gray-100 rounded-md', page.url == accion.url ? '!text-gray-800 !bg-gray-100' : '']">
                         <div class="flex items-center hover:text-gray-800">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
                                 viewBox="0 0 24 24" stroke="currentColor">
