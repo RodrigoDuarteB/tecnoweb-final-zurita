@@ -14,8 +14,7 @@
                 </div>
                 <div class="flex justify-center">
                     <div class="">
-                        <img class="hidden h-24 w-24 rounded-full sm:block object-cover mr-2 border-4"
-                            src="" alt="">
+                        <img class="hidden h-24 w-24 rounded-full sm:block object-cover mr-2 border-4" src="/images/user.jpg" alt="">
                         <p class="font-bold text-base {{ config('styles.general.textos') }} pt-2 text-center w-24">{{ $page.props.auth.user.name }}</p>
                     </div>
                 </div>

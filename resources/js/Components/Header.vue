@@ -11,7 +11,8 @@
             </button>
 
             <!-- Search Input -->
-            <div class="flex justify-center mt-2 mr-4">
+            <MenuAutocomplete />
+            <!-- <div class="flex justify-center mt-2 mr-4">
                 <div class="relative flex w-full flex-wrap items-stretch mb-3">
                     <input id="buscador" type="search" placeholder="Buscar" autocomplete="true"
                         class="form-input px-3 py-2 placeholder-gray-400 text-gray-700 relative bg-white rounded-lg text-sm shadow outline-none focus:outline-none focus:shadow-outline w-full pr-10 border-2" style="width: 500px;"/>
@@ -26,7 +27,7 @@
                 </div>
                 <div class="absolute rounded shadow bg-white overflow-hidden peer-checked:flex flex-col mt-1 border border-gray-200" style="top: 3rem; left: 16.6rem; width: 500px;" id="busquedaResultados" hidden>
                 </div>
-            </div>
+            </div> -->
 
             <ul class="flex items-center flex-shrink-0 space-x-6">
                 <SettingsButton />
@@ -37,6 +38,7 @@
 </template>
 
 <script setup>
+import MenuAutocomplete from './MenuAutocomplete.vue';
 import SettingsButton from './SettingsButton.vue';
 
 

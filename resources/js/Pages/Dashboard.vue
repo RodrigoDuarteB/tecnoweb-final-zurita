@@ -19,6 +19,9 @@ import { Link, usePage } from '@inertiajs/vue3';
             <Link :href="route('pago.index')">
                 <PrimaryButton>Ir a Mis Pagos</PrimaryButton>
             </Link>
+            <Link :href="route('politica.index')">
+                <PrimaryButton>Ver Políticas</PrimaryButton>
+            </Link>
         </div>
     </ManagmentLayout>
 </template>
