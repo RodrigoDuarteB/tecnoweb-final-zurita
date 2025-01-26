@@ -28,7 +28,7 @@ defineProps({
             <div class="container mx-auto flex flex-wrap items-center">
                 <div class="flex w-full md:w-1/2 justify-center md:justify-start text-white font-extrabold">
                     <a class="text-white no-underline hover:text-white hover:no-underline" href="#">
-                        <span :class="['text-2xl pl-2', styles.textos]">Gestion de Pagos Gobernación Rurrenabaque</span>
+                        <span :class="['text-2xl pl-2', styles.textos]">Gestion de Pagos GAM Rurrenabaque</span>
                     </a>
                 </div>
                 <div class="flex w-full pt-2 content-center justify-between md:w-1/2 md:justify-end">

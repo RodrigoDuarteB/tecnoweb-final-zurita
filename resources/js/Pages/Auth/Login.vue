@@ -47,7 +47,7 @@ import { getTimeStyles } from '@/utils';
                     <h1 class="text-5xl font-bold text-left tracking-wide">
                         Sistema de Pagos
                     </h1>
-                    <p class="text-3xl my-4">Gobernacion Rurrenabaque</p>
+                    <p class="text-3xl my-4">GAM Rurrenabaque</p>
                 </div>
             </div>
             <div class="lg:w-1/2 w-full flex items-center justify-center text-center md:px-16 px-0 z-0" style="background-color: #161616;">

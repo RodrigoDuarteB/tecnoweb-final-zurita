@@ -5,10 +5,10 @@
                 <div class="flex p-2">
                     <Link class="flex flex-col py-3 px-2 items-center" :href="route('dashboard')">
                         <p :class="['text-2xl font-semibold', styles.titulo]">
-                            Gobernacion
+                            Gestion de Pagos
                         </p>
                         <p :class="['ml-2 font-semibold italic', styles.textos]">
-                            Rurrenabaque
+                            GAM Rurrenabaque
                         </p>
                     </Link>
                 </div>
