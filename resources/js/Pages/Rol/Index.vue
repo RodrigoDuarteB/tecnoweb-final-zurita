@@ -26,7 +26,7 @@
                                 <VerButton :href="route('rol.show', { id: item.id })" />
                             </AuthPermission>
 
-                            <AuthPermission menu="Gestionar Roles" accion="Editar">
+                            <AuthPermission menu="Gestionar Roles" accion="Editar" v-if="item.editable">
                                 <EditarButton :href="route('rol.edit', { id: item.id })" />
                             </AuthPermission>
 

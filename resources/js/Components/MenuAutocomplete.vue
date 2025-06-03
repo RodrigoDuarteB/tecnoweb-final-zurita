@@ -20,7 +20,13 @@
                 class="flex flex-col"
             >
                 <span class="bg-gray-500 text-white">{{ item.nombre  }}</span>
-                <NavLink  v-for="(accion, i) in item.acciones" :key="i" class="p-2 hover:bg-gray-200 cursor-pointer border-b border-b-gray-300" :href="`http://mail.tecnoweb.org.bo/inf513/grupo08sa/proyecto2/public${accion.url}`">
+                <!-- <NavLink  v-for="(accion, i) in item.acciones" :key="i" class="p-2 hover:bg-gray-200 cursor-pointer border-b border-b-gray-300" :href="`http://mail.tecnoweb.org.bo/inf513/grupo08sa/proyecto2/public${accion.url}`">
+                    {{ accion.nombre }}
+                </NavLink> -->
+                <NavLink
+                    v-for="(accion, i) in item.acciones" :key="i"
+                    class="p-2 hover:bg-gray-200 cursor-pointer border-b border-b-gray-300" :href="accion.url"
+                >
                     {{ accion.nombre }}
                 </NavLink>
             </div>
@@ -54,7 +60,7 @@ import NavLink from './NavLink.vue';
             showSuggestions.value = true
 
             try {
-                const response = await axios.get('api/menu/buscar', {
+                const response = await axios.get('/api/menu/buscar', {
                     params: { termino: searchTerm.value },
                     cancelToken: cancelTokenSource.token,
                 });

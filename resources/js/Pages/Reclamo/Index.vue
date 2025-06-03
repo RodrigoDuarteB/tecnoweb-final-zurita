@@ -36,6 +36,9 @@
                         </div>
                     </td>
                 </tr>
+                <tr v-if="!items.length">
+                    <td colspan="99" class="text-center">No hay items para mostrar</td>
+                </tr>
             </tbody>
         </table>
         <DialogModal :show="showModal" @close="showModal = false">

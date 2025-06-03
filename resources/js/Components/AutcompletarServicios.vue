@@ -50,7 +50,9 @@ import InputLabel from './InputLabel.vue';
             isLoading.value = true;
 
             try {
-                const response = await axios.get('http://mail.tecnoweb.org.bo/inf513/grupo08sa/proyecto2/public/api/servicio/buscar', {
+                /* const url = 'http://mail.tecnoweb.org.bo/inf513/grupo08sa/proyecto2/public/api/servicio/buscar' */
+                const url = '/api/servicio/buscar'
+                const response = await axios.get(url, {
                     params: { termino: searchTerm.value },
                     cancelToken: cancelTokenSource.token,
                 });

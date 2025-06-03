@@ -62,7 +62,7 @@ class User extends Authenticatable
     ];
 
     public function getPermisosAttribute(){
-        if($this->rol_id == 1) {
+        if($this->rol->admin) {
             return Menu::activos()
             ->with(['acciones'])
             ->select('id', 'nombre as menu', 'estado', 'created_at')
@@ -101,7 +101,6 @@ class User extends Authenticatable
                 })->toArray(),
             ];
         })->values(); // Para convertir a una colección simple
-
         return $groupedPermisos;
     }
 

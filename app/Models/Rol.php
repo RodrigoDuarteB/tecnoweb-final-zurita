@@ -10,7 +10,14 @@ class Rol extends Model
     use Modelo;
 
     protected $table = 'rol';
-    protected $fillable = ['nombre', 'descripcion', 'estado', 'editable', 'listable'];
+    protected $fillable = [
+        'nombre',
+        'descripcion',
+        'estado',
+        'editable',
+        'listable',
+        'admin'
+    ];
 
     public function permisos() {
         return $this->hasMany(Permiso::class, 'rol_id');
