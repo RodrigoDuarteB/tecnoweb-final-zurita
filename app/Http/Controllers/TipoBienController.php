@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\TipoBienStoreRequest;
+use App\Http\Requests\TipoBienUpdateRequest;
 use App\Models\TipoBien;
 use Illuminate\Http\Request;
 
@@ -26,9 +28,12 @@ class TipoBienController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(TipoBienStoreRequest $request)
     {
-        //
+        $tipoBien = TipoBien::create([
+            'nombre' => $request->nombre,
+            'descripcion' => $request->descripcion,
+        ]);
     }
 
     /**
@@ -50,9 +55,12 @@ class TipoBienController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, TipoBien $tipoBien)
+    public function update(TipoBienUpdateRequest $request, TipoBien $tipoBien)
     {
-        //
+        $tipoBien->update([
+            'nombre' => $request->nombre,
+            'descripcion' => $request->descripcion,
+        ]);
     }
 
     /**

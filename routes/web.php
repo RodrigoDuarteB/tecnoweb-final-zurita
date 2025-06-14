@@ -1,9 +1,9 @@
 <?php
 
+use App\Http\Controllers\BienController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
-use App\Models\User;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ConfiguracionController;
 use App\Http\Controllers\DescuentoController;
@@ -14,6 +14,7 @@ use App\Http\Controllers\ReclamoController;
 use App\Http\Controllers\ReporteController;
 use App\Http\Controllers\RolController;
 use App\Http\Controllers\ServicioController;
+use App\Http\Controllers\TipoBienController;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -41,6 +42,8 @@ Route::middleware([
     Route::resource('politica', PoliticaController::class);
     Route::resource('descuento', DescuentoController::class);
     Route::resource('pago', PagoController::class);
+    Route::resource('tipoBien', TipoBienController::class);
+    Route::resource('bien', BienController::class);
     Route::get('pago/{pago}/confirmar', [PagoController::class, 'confirmar'])->name('pago.confirmar');
     Route::get('reportes', [ReporteController::class, 'index'])->name('reporte.index');
     Route::get('reporte/pagosPorCliente', [ReporteController::class, 'pagosCliente'])->name('reporte.pagosPorCliente');

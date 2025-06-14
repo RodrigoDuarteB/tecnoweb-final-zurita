@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use App\Traits\Modelo;
 use Illuminate\Database\Eloquent\Model;
 
 class TipoBien extends Model
 {
+    use Modelo;
     protected $table = 'tipo_bien';
     protected $fillable = [
         'nombre',

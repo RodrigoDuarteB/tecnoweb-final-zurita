@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\BienStoreRequest;
+use App\Http\Requests\BienUpdateRequest;
 use App\Models\Bien;
 use Illuminate\Http\Request;
 
@@ -26,9 +28,15 @@ class BienController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(BienStoreRequest $request)
     {
-        //
+        $bien = Bien::create([
+            'cliente_id' => $request->user()->cliente->id,
+            'tipo_bien_id' => $request->tipo_bien_id,
+            'nombre' => $request->nombre,
+            'descripcion' => $request->descripcion,
+            'valor_referencial' => $request->valor_referencial,
+        ]);
     }
 
     /**
@@ -50,9 +58,14 @@ class BienController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Bien $bien)
+    public function update(BienUpdateRequest $request, Bien $bien)
     {
-        //
+        $bien->update([
+            'tipo_bien_id' => $request->tipo_bien_id,
+            'nombre' => $request->nombre,
+            'descripcion' => $request->descripcion,
+            'valor_referencial' => $request->valor_referencial,
+        ]);
     }
 
     /**
@@ -60,6 +73,8 @@ class BienController extends Controller
      */
     public function destroy(Bien $bien)
     {
-        //
+        $bien->update([
+            'estado' => 'Inactivo',
+        ]);
     }
 }
