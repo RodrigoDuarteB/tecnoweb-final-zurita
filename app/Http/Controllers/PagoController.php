@@ -31,7 +31,25 @@ class PagoController extends Controller
      */
     public function create()
     {
-        return Inertia::render('Pago/Create');
+        $obligacionesPendientes = auth()->user()->cliente->obligaciones()
+            ->where('obligacion.estado', 'Pendiente')
+            ->with(['bien', 'obligacionTipoBien'])
+            ->get();
+        $obligacionesPendientes = $obligacionesPendientes->map(function ($obligacion) {
+            $obTipoBien = $obligacion->obligacionTipoBien;
+            $bien = $obligacion->bien;
+            return [
+                'id' => $obligacion->id,
+                'nombre' => "$obTipoBien->nombre - ($bien->nombre)",
+                'cantidad' => 1,
+                'precio' => $obTipoBien->precio,
+                'fecha_vencimiento' => $obligacion->fecha_vencimiento,
+                'subtotal' => $obTipoBien->precio,
+            ];
+        });
+        return Inertia::render('Pago/Create', [
+            'obligacionesPendientes' => $obligacionesPendientes
+        ]);
     }
 
 

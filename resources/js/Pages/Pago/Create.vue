@@ -18,19 +18,25 @@
                 </div>
             </div>
 
+            <ObligacionesPendientes
+                :items="obligacionesPendientes"
+                @onAdd="addObligation"
+            />
+
             <div class="flex flex-col mt-2 gap-3">
                 <InputError :message="errors.servicios"/>
                 <div class="my-2" v-if="editable">
                     <AutcompletarServicios @select="handleAddServicio"/>
                 </div>
                 <span class="font-semibold text-[1rem] border-b border-b-gray-400">
-                    Servicios del Pago
+                    Detalle del Pago
                 </span>
 
                 <table class="min-w-max w-full table-auto">
                     <thead>
                         <tr class="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
                             <th class="py-3 px-6 text-center">Id</th>
+                            <th class="py-3 px-6 text-center">Tipo</th>
                             <th class="py-3 px-6 text-center">Nombre</th>
                             <th class="py-3 px-6 text-center">Cantidad</th>
                             <th class="py-3 px-6 text-center">Costo p/u</th>
@@ -46,15 +52,18 @@
                                 {{ item.id }}
                             </td>
                             <td class="py-3 px-6 text-center whitespace-nowrap">
+                                {{ item.esObligacion ? 'Obligación' : 'Servicio' }}
+                            </td>
+                            <td class="py-3 px-6 text-center whitespace-nowrap">
                                 {{ item.nombre }}
                             </td>
                             <td class="py-3 px-6 whitespace-nowrap">
                                 <div v-if="editable" class="flex gap-2 items-center justify-center">
-                                    <button @click="handleChangeCantidad({ index, type: '-' })" type="button" class="px-2 py-1 bg-blue-400 rounded-md font-semibold text-[1rem]">
+                                    <button @click="handleChangeCantidad({ index, type: '-' })" type="button" class="px-2 py-1 bg-blue-400 rounded-md font-semibold text-[1rem]" v-if="!item.esObligacion">
                                         -
                                     </button>
                                     <span>{{ item.cantidad }}</span>
-                                    <button @click="handleChangeCantidad({ index, type: '+' })" type="button" class="px-2 py-1 bg-blue-400 rounded-md font-semibold text-[1rem]">
+                                    <button @click="handleChangeCantidad({ index, type: '+' })" type="button" class="px-2 py-1 bg-blue-400 rounded-md font-semibold text-[1rem]" v-if="!item.esObligacion">
                                         +
                                     </button>
                                 </div>
@@ -125,12 +134,12 @@ import EliminarButton from '@/Components/EliminarButton.vue';
 import { hideLoading, showLoading } from '@/state';
 import AutcompletarServicios from '@/Components/AutcompletarServicios.vue';
 import { ourParseFloat } from '@/utils';
+import ObligacionesPendientes from './ObligacionesPendientes.vue';
 
-    const props = defineProps(['errors', 'pago', 'servicios', 'esVer', 'esConfirmar']);
+    const props = defineProps(['errors', 'pago', 'servicios', 'esVer', 'esConfirmar', 'obligacionesPendientes']);
     const pago = props.pago
     const numberFormat = Intl.NumberFormat('es-BO', {maximumFractionDigits: 2})
     const editable = !props.esVer && !props.esConfirmar
-
     function getTitulo() {
         if(pago) {
             return props.esVer ? `Ver Pago ${pago.id}` : `Confirmar Pago ${pago.id}`
@@ -229,6 +238,14 @@ import { ourParseFloat } from '@/utils';
         } else {
             item.subtotal = item.precio * item.cantidad
         }
+    }
+
+    function addObligation(id) {
+        const obligacion = props.obligacionesPendientes.find(ob => ob.id == id)
+        form.servicios.push({
+            ...obligacion,
+            esObligacion: true
+        })
     }
 
 </script>

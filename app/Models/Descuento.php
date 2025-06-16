@@ -72,4 +72,9 @@ class Descuento extends Model
     {
         return $this->belongsToMany(Servicio::class, 'servicio_descuento');
     }
+
+    public function obligacionesTipoBien()
+    {
+        return $this->belongsToMany(ObligacionTipoBien::class, 'servicio_descuento');
+    }
 }

@@ -18,4 +18,8 @@ class Cliente extends Model
         return $this->hasMany(Bien::class, 'cliente_id');
     }
 
+    public function obligaciones() {
+        return $this->hasManyThrough(Obligacion::class, Bien::class);
+    }
+
 }
