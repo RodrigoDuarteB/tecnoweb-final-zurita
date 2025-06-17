@@ -10,7 +10,7 @@ class Menu extends Model
     use Modelo;
 
     protected $table = 'menu';
-    protected $fillable = ['nombre', 'descripcion', 'estado'];
+    protected $fillable = ['nombre', 'descripcion', 'user_id', 'estado'];
 
     public function acciones() {
         return $this->hasMany(Accion::class, 'menu_id');

@@ -15,6 +15,7 @@ class ObligacionTipoBien extends Model
         'tipo',
         'precio',
         'frecuencia',
+        'user_id',
         'estado',
     ];
 

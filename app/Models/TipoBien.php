@@ -12,6 +12,7 @@ class TipoBien extends Model
     protected $fillable = [
         'nombre',
         'descripcion',
+        'user_id',
         'estado',
     ];
 

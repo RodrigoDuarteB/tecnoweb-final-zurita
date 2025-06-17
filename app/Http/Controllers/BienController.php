@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\BienStoreRequest;
 use App\Http\Requests\BienUpdateRequest;
 use App\Models\Bien;
-use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class BienController extends Controller
 {
@@ -14,7 +14,14 @@ class BienController extends Controller
      */
     public function index()
     {
-        //
+        $cliente = auth()->user()->cliente;
+        $items = Bien::activos()
+        ->with('cliente', 'tipoBien');
+        if($cliente) {
+            $items = $items->where('cliente_id', $cliente->id);
+        }
+        $items = $items->get();
+        return Inertia::render('Bien/Index', compact('items'));
     }
 
     /**

@@ -38,7 +38,8 @@ class MenuController extends Controller
         try {
             $menu = Menu::create([
                 'nombre' => $request->nombre,
-                'descripcion' => $request->descripcion
+                'descripcion' => $request->descripcion,
+                'user_id' => auth()->user()->id
             ]);
 
             $menu->acciones()->createMany($request->acciones);

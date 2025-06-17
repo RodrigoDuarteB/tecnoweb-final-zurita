@@ -14,6 +14,7 @@ class Obligacion extends Model
         'obligacion_tipo_bien_id',
         'fecha_vencimiento',
         'corresponde_a',
+        'user_id',
         'estado',
     ];
 

@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\TipoBienStoreRequest;
 use App\Http\Requests\TipoBienUpdateRequest;
 use App\Models\TipoBien;
-use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class TipoBienController extends Controller
 {
@@ -14,7 +14,10 @@ class TipoBienController extends Controller
      */
     public function index()
     {
-        //
+        $items = TipoBien::activos()
+        ->with('usuarioCreador')
+        ->get();
+        return Inertia::render('TipoBien/Index', compact('items'));
     }
 
     /**
@@ -22,7 +25,7 @@ class TipoBienController extends Controller
      */
     public function create()
     {
-        //
+        return Inertia::render('TipoBien/Create');
     }
 
     /**
@@ -30,10 +33,15 @@ class TipoBienController extends Controller
      */
     public function store(TipoBienStoreRequest $request)
     {
-        $tipoBien = TipoBien::create([
-            'nombre' => $request->nombre,
-            'descripcion' => $request->descripcion,
+        TipoBien::create([
+            ...$request->all(),
+            'user_id' => auth()->user()->id
         ]);
+        session()->flash('jetstream.flash', [
+            'banner' => 'Tipo Bien creado corretamente!',
+            'bannerStyle' => 'success'
+        ]);
+        return redirect()->route('tipoBien.index');
     }
 
     /**
@@ -41,7 +49,10 @@ class TipoBienController extends Controller
      */
     public function show(TipoBien $tipoBien)
     {
-        //
+        return Inertia::render('TipoBien/Create', [
+            'item' => $tipoBien,
+            'esVer' => true
+        ]);
     }
 
     /**
@@ -49,7 +60,9 @@ class TipoBienController extends Controller
      */
     public function edit(TipoBien $tipoBien)
     {
-        //
+        return Inertia::render('TipoBien/Create', [
+            'item' => $tipoBien,
+        ]);
     }
 
     /**
@@ -57,10 +70,12 @@ class TipoBienController extends Controller
      */
     public function update(TipoBienUpdateRequest $request, TipoBien $tipoBien)
     {
-        $tipoBien->update([
-            'nombre' => $request->nombre,
-            'descripcion' => $request->descripcion,
+        $tipoBien->update($request->all());
+        session()->flash('jetstream.flash', [
+            'banner' => 'Tipo Bien editado corretamente!',
+            'bannerStyle' => 'success'
         ]);
+        return redirect()->route('tipoBien.index');
     }
 
     /**
@@ -68,6 +83,11 @@ class TipoBienController extends Controller
      */
     public function destroy(TipoBien $tipoBien)
     {
-        //
+        $tipoBien->eliminar();
+        session()->flash('jetstream.flash', [
+            'banner' => 'Tipo Bien eliminado corretamente!',
+            'bannerStyle' => 'success'
+        ]);
+        return redirect()->route('tipoBien.index');
     }
 }
