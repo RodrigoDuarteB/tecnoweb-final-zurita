@@ -32,7 +32,10 @@ class PagoController extends Controller
     public function create()
     {
         $obligacionesPendientes = auth()->user()->cliente->obligaciones()
-            ->where('obligacion.estado', 'Pendiente')
+            ->where([
+                'obligacion.estado' => 'Pendiente',
+                'bien.estado' => 'Activo'
+            ])
             ->with(['bien', 'obligacionTipoBien'])
             ->get();
         $obligacionesPendientes = $obligacionesPendientes->map(function ($obligacion) {

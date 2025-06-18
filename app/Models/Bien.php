@@ -27,4 +27,8 @@ class Bien extends Model
     {
         return $this->belongsTo(TipoBien::class, 'tipo_bien_id');
     }
+
+    public function obligaciones() {
+        return $this->hasMany(Obligacion::class, 'bien_id');
+    }
 }

@@ -23,7 +23,7 @@
                         {{ item.descripcion}}
                     </td>
                     <td class="py-3 px-6 text-center whitespace-nowrap">
-                        {{ item.valor_referencial }}
+                        {{ formatNumber(item.valor_referencial) }} Bs
                     </td>
                     <td class="py-3 px-6 text-center whitespace-nowrap">
                         {{ item.tipo_bien.nombre }}
@@ -51,7 +51,7 @@
                 <h1>Confirmar Eliminación</h1>
             </template>
             <template v-slot:content>
-                <p>¿Estás seguro de que quieres eliminar el tipo de bien con id <strong> {{ selectedItem }}</strong>?</p>
+                <p>¿Estás seguro de que quieres eliminar el bien con id <strong> {{ selectedItem }}</strong>?</p>
             </template>
             <template v-slot:footer>
                 <PrimaryButton @click="deleteItem" class="bg-red-500 hover:bg-red-800">Eliminar</PrimaryButton>
@@ -72,6 +72,7 @@ import VerButton from '@/Components/VerButton.vue';
 import EditarButton from '@/Components/EditarButton.vue';
 import EliminarButton from '@/Components/EliminarButton.vue';
 import { hideLoading, showLoading } from '@/state';
+import { formatNumber } from '@/utils';
     const props = defineProps(['items'])
 
     const deleteItem = () => {

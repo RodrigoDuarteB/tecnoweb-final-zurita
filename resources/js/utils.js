@@ -33,6 +33,10 @@ export function isCurrentTimeBetween(startTime, endTime) {
     }
 }
 
+export function formatNumber(val) {
+    return Intl.NumberFormat('es-BO', {maximumFractionDigits: 2}).format(val)
+}
+
 
 export function getTimeStyles() {
     let styles = {

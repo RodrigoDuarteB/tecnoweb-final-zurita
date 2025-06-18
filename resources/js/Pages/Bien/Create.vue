@@ -1,18 +1,34 @@
 <template>
-    <ManagmentLayout :title="getTitulo()">
+    <ManagmentLayout :title="titulo">
         <form @submit.prevent="submit">
-            <div class="flex gap-2">
-                <div class="w-full">
-                    <InputLabel for="nombre" value="Nombre"/>
-                    <InputError :message="errors.nombre"/>
-                    <TextInput type="text" v-model="form.nombre" id="nombre" class="mt-1 block w-full" required :disabled="disabled"/>
+            <div class="flex flex-col gap-2">
+                <div class="flex gap-2">
+                    <div class="w-full">
+                        <InputLabel for="nombre" value="Nombre"/>
+                        <InputError :message="errors.nombre"/>
+                        <TextInput type="text" v-model="form.nombre" id="nombre" class="mt-1 block w-full" required :disabled="disabled"/>
+                    </div>
+
+                    <div class="w-full">
+                        <InputLabel for="descripcion" value="Descripción"/>
+                        <InputError :message="errors.descripcion"/>
+                        <TextInput v-model="form.descripcion" id="descripcion" class="mt-1 block w-full" :disabled="disabled"/>
+                    </div>
                 </div>
 
-                <div class="w-full">
-                    <InputLabel for="descripcion" value="Descripción"/>
-                    <InputError :message="errors.descripcion"/>
-                    <TextInput v-model="form.descripcion" id="descripcion" class="mt-1 block w-full" :disabled="disabled"/>
-                </div>
+               <div class="flex gap-2">
+                    <div class="w-full">
+                        <InputLabel for="valor_referencial" value="Valor Referencial"/>
+                        <InputError :message="errors.valor_referencial"/>
+                        <TextInput v-model="form.valor_referencial" id="valor_referencial" class="mt-1 block w-full" :disabled="disabled" type="number"/>
+                    </div>
+
+                    <div class="w-full">
+                        <InputLabel for="tipo_bien" value="Tipo de Bien"/>
+                        <InputError :message="errors.tipo_bien_id"/>
+                        <Select v-model="form.tipo_bien_id" id="tipo_bien" class="mt-1 block w-full" :disabled="disabled" :items="items" required/>
+                    </div>
+               </div>
             </div>
 
             <PrimaryButton v-if="!esVer" type="submit" class="mt-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
@@ -30,34 +46,47 @@ import InputLabel from '@/Components/InputLabel.vue';
 import TextInput from '@/Components/TextInput.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import { hideLoading, showLoading } from '@/state';
+import { computed } from 'vue';
+import Select from '@/Components/Select.vue';
 
-    const props = defineProps(['errors', 'item', 'esVer']);
+    const props = defineProps(['errors', 'item', 'esVer', 'tiposBien']);
     const item = props.item
     const disabled = props.esVer ? true : false
 
-    function getTitulo() {
-        if(item) {
-            return props.esVer ? `Ver Tipo Bien ${item.id}` : `Editar Tipo Bien ${item.id}`
+    const titulo = computed(() => {
+         if(item) {
+            return props.esVer ? `Ver Bien ${item.id}` : `Editar Bien ${item.id}`
         }
-        return 'Registrar Tipo Bien'
-    }
+        return 'Registrar Bien'
+    })
+
+    const items = computed(() => {
+        return props.tiposBien?.map((tb) => {
+            return {
+                label: tb.nombre,
+                value: tb.id
+            }
+        })
+    })
 
     const form = useForm({
         id: item?.id ?? null,
         nombre: item?.nombre ?? '',
-        descripcion: item?.descripcion ?? ''
+        descripcion: item?.descripcion ?? '',
+        valor_referencial: item?.valor_referencial ?? 0,
+        tipo_bien_id: item?.tipo_bien_id
     });
 
     const submit = () => {
         showLoading()
         if(item?.id) {
-            form.put(route('tipoBien.update', { id: item.id }), {
+            form.put(route('bien.update', { id: item.id }), {
                 onFinish() {
                     hideLoading()
                 }
             })
         } else {
-            form.post(route('tipoBien.store'), {
+            form.post(route('bien.store'), {
                 onFinish() {
                     hideLoading()
                 }

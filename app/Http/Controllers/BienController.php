@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\BienStoreRequest;
 use App\Http\Requests\BienUpdateRequest;
 use App\Models\Bien;
+use App\Models\TipoBien;
 use Inertia\Inertia;
 
 class BienController extends Controller
@@ -29,7 +30,9 @@ class BienController extends Controller
      */
     public function create()
     {
-        //
+        return Inertia::render('Bien/Create', [
+            'tiposBien' => TipoBien::activos()->get()
+        ]);
     }
 
     /**
@@ -37,13 +40,16 @@ class BienController extends Controller
      */
     public function store(BienStoreRequest $request)
     {
-        $bien = Bien::create([
+        Bien::create([
+            ...$request->all(),
             'cliente_id' => $request->user()->cliente->id,
-            'tipo_bien_id' => $request->tipo_bien_id,
-            'nombre' => $request->nombre,
-            'descripcion' => $request->descripcion,
-            'valor_referencial' => $request->valor_referencial,
+            'valor_referencial' => round($request->valor_referencial, 2)
         ]);
+        session()->flash('jetstream.flash', [
+            'banner' => 'Bien creado corretamente!',
+            'bannerStyle' => 'success'
+        ]);
+        return redirect()->route('bien.index');
     }
 
     /**
@@ -51,7 +57,11 @@ class BienController extends Controller
      */
     public function show(Bien $bien)
     {
-        //
+         return Inertia::render('Bien/Create', [
+            'item' => $bien,
+            'esVer' => true,
+            'tiposBien' => TipoBien::activos()->get()
+        ]);
     }
 
     /**
@@ -59,7 +69,10 @@ class BienController extends Controller
      */
     public function edit(Bien $bien)
     {
-        //
+        return Inertia::render('Bien/Create', [
+            'item' => $bien,
+            'tiposBien' => TipoBien::activos()->get()
+        ]);
     }
 
     /**
@@ -68,11 +81,14 @@ class BienController extends Controller
     public function update(BienUpdateRequest $request, Bien $bien)
     {
         $bien->update([
-            'tipo_bien_id' => $request->tipo_bien_id,
-            'nombre' => $request->nombre,
-            'descripcion' => $request->descripcion,
-            'valor_referencial' => $request->valor_referencial,
+            ...$request->all(),
+            'valor_referencial' => round($request->valor_referencial, 2)
         ]);
+        session()->flash('jetstream.flash', [
+            'banner' => 'Bien actualizado corretamente!',
+            'bannerStyle' => 'success'
+        ]);
+        return redirect()->route('bien.index');
     }
 
     /**
@@ -80,8 +96,16 @@ class BienController extends Controller
      */
     public function destroy(Bien $bien)
     {
-        $bien->update([
-            'estado' => 'Inactivo',
+        $bien->eliminar();
+        $bien->obligaciones()
+        ->where('estado', 'Pendiente')
+        ->update([
+            'estado' => 'Cancelada'
         ]);
+        session()->flash('jetstream.flash', [
+            'banner' => 'Bien eliminado corretamente!',
+            'bannerStyle' => 'success'
+        ]);
+        return redirect()->route('bien.index');
     }
 }

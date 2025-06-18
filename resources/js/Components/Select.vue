@@ -1,7 +1,7 @@
 <template>
     <select v-model="internalValue"
     @change="updateValue" class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
-        <option :value="null">Seleccione un Item</option>
+        <option :value="null" :unselectable="true">Seleccione un Item</option>
         <option v-for="(item, index) in items" :key="index" :value="item.value">
             {{ item.label }}
         </option>
