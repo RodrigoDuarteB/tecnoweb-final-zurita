@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests;
 
+use App\FrecuenciaObligacionEnum;
+use App\TipoObligacionEnum;
 use Illuminate\Foundation\Http\FormRequest;
 
 class TipoBienStoreRequest extends FormRequest
@@ -24,6 +26,11 @@ class TipoBienStoreRequest extends FormRequest
         return [
             'nombre' => 'required|string|unique:tipo_bien,nombre',
             'descripcion' => 'nullable|string|max:1000',
+            'obligaciones' => 'required|array',
+            'obligaciones.*.nombre' => 'required|string',
+            'obligaciones.*.precio' => 'required|numeric',
+            'obligaciones.*.frecuencia' => "required|in:" . FrecuenciaObligacionEnum::imploded(),
+            'obligaciones.*.tipo' => "required|in:" . TipoObligacionEnum::imploded(),
         ];
     }
 }

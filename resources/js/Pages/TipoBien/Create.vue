@@ -15,6 +15,8 @@
                 </div>
             </div>
 
+            <ObligacionTipoBienRow v-for="obligacion in form.obligaciones" :key="obligacion.id" :item="obligacion" />
+
             <PrimaryButton v-if="!esVer" type="submit" class="mt-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
                 {{ form.id ? 'Actualizar' : 'Guardar' }}
             </PrimaryButton>
@@ -30,6 +32,7 @@ import InputLabel from '@/Components/InputLabel.vue';
 import TextInput from '@/Components/TextInput.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import { hideLoading, showLoading } from '@/state';
+import ObligacionTipoBienRow from '@/Components/ObligacionTipoBienRow.vue';
 
     const props = defineProps(['errors', 'item', 'esVer']);
     const item = props.item
@@ -45,7 +48,15 @@ import { hideLoading, showLoading } from '@/state';
     const form = useForm({
         id: item?.id ?? null,
         nombre: item?.nombre ?? '',
-        descripcion: item?.descripcion ?? ''
+        descripcion: item?.descripcion ?? '',
+        obligaciones: item?.obligaciones ?? [
+            {
+                nombre: '',
+                tipo: '',
+                frecuencia: '',
+                precio: ''
+            }
+        ]
     });
 
     const submit = () => {

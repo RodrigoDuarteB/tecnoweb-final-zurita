@@ -33,10 +33,11 @@ class TipoBienController extends Controller
      */
     public function store(TipoBienStoreRequest $request)
     {
-        TipoBien::create([
+        $tipoBien = TipoBien::create([
             ...$request->all(),
             'user_id' => auth()->user()->id
         ]);
+        $tipoBien->obligaciones()->createMany($request->obligaciones);
         session()->flash('jetstream.flash', [
             'banner' => 'Tipo Bien creado corretamente!',
             'bannerStyle' => 'success'
