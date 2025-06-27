@@ -15,7 +15,20 @@
                 </div>
             </div>
 
-            <ObligacionTipoBienRow v-for="obligacion in form.obligaciones" :key="obligacion.id" :item="obligacion" />
+            <div class="mt-3">
+                <div class="flex gap-2 items-center">
+                    <span class="font-semibold text-[1.3rem]">Obligaciones</span>
+                    <PrimaryButton type="button" class="mt-4 ml-2 w-fit" :class="{ 'opacity-25': form.processing }" :disabled="form.processing || disabled" @click="addObligacion">Añadir</PrimaryButton>
+                </div>
+                <ObligacionTipoBienRow
+                    v-for="(obligacion, i) in form.obligaciones.filter(el => el.estado == 'Activo')"
+                    :key="obligacion.id"
+                    :item="obligacion"
+                    :is-last="i == form.obligaciones.length - 1"
+                    @delete="handleDeleteObligacion(obligacion.id, i)"
+                    :disabled="disabled"
+                />
+            </div>
 
             <PrimaryButton v-if="!esVer" type="submit" class="mt-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
                 {{ form.id ? 'Actualizar' : 'Guardar' }}
@@ -51,13 +64,34 @@ import ObligacionTipoBienRow from '@/Components/ObligacionTipoBienRow.vue';
         descripcion: item?.descripcion ?? '',
         obligaciones: item?.obligaciones ?? [
             {
+                id: null,
                 nombre: '',
                 tipo: '',
                 frecuencia: '',
-                precio: ''
+                precio: '',
+                estado: 'Activo'
             }
         ]
     });
+
+    function addObligacion() {
+        form.obligaciones.push({
+            id: null,
+            nombre: '',
+            tipo: '',
+            frecuencia: '',
+            precio: '',
+            estado: 'Activo'
+        })
+    }
+
+    function handleDeleteObligacion(id, index) {
+        if(id) {
+            form.obligaciones.find(el => el.id == id).estado = 'Inactivo'
+        } else {
+            form.obligaciones.splice(index, 1)
+        }
+    }
 
     const submit = () => {
         showLoading()

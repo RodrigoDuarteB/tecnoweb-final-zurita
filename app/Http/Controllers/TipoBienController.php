@@ -50,6 +50,7 @@ class TipoBienController extends Controller
      */
     public function show(TipoBien $tipoBien)
     {
+        $tipoBien->load('obligaciones');
         return Inertia::render('TipoBien/Create', [
             'item' => $tipoBien,
             'esVer' => true
@@ -61,6 +62,7 @@ class TipoBienController extends Controller
      */
     public function edit(TipoBien $tipoBien)
     {
+        $tipoBien->load('obligaciones');
         return Inertia::render('TipoBien/Create', [
             'item' => $tipoBien,
         ]);

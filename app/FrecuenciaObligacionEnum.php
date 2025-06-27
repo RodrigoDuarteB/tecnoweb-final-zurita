@@ -16,6 +16,6 @@ enum FrecuenciaObligacionEnum: string
     }
 
     public static function imploded() {
-        return implode(',', self::cases());
+        return implode(',', self::values());
     }
 }
