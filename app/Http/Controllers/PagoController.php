@@ -58,7 +58,6 @@ class PagoController extends Controller
 
     public function store(Request $request)
     {
-        dd($request->all());
         DB::beginTransaction();
         try {
             $pago = Pago::create([
@@ -67,11 +66,20 @@ class PagoController extends Controller
             ]);
 
             $servicios = [];
+            $obligaciones = [];
             foreach ($request->servicios as $servicio) {
-                $servicios[$servicio['servicio_id']] = $servicio;
+                if(isset($servicio['es_obligacion']) && $servicio['es_obligacion']) {
+                    $servicio['obligacion_id'] = $servicio['servicio_id'];
+                    unset($servicio['servicio_id']);
+                    unset($servicio['es_obligacion']);
+                    $obligaciones['obligacion_id'] = $servicio;
+                } else {
+                    $servicios[$servicio['servicio_id']] = $servicio;
+                }
             }
 
             $pago->servicios()->sync($servicios);
+            $pago->obligaciones()->sync($obligaciones);
             DB::commit();
             session()->flash('jetstream.flash', [
                 'banner' => 'Pago creado corretamente!',
@@ -82,6 +90,7 @@ class PagoController extends Controller
             ]);
         } catch (Exception $e) {
             DB::rollBack();
+            dd($e->getMessage(), $e->getTraceAsString());
             session()->flash('jetstream.flash', [
                 'banner' => 'Hubo un error al crear el Pago!',
                 'bannerStyle' => 'danger'

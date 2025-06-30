@@ -62,7 +62,7 @@ class Pago extends Model
 
     public function obligaciones()
     {
-        return $this->belongsToMany(Obligacion::class, 'servicio_pago', 'obligacion_id')
+        return $this->belongsToMany(Obligacion::class, 'servicio_pago', 'pago_id', 'obligacion_id')
         ->withPivot('monto_servicio', 'monto_descuento', 'porcentaje_descuento', 'subtotal', 'total_descuento', 'cantidad');
     }
 
