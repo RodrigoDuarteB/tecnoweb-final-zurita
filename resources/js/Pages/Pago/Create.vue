@@ -19,6 +19,7 @@
             </div>
 
             <ObligacionesPendientes
+                v-if="editable"
                 :items="obligacionesPendientes"
                 @onAdd="addObligation"
                 :servicios="form.servicios"
@@ -100,6 +101,7 @@
                             <td></td>
                             <td></td>
                             <td></td>
+                            <td></td>
                             <td class="py-3 px-6 text-center whitespace-nowrap font-semibold">
                                 Total {{ numberFormat.format(getSubtotal()) }}
                             </td>
@@ -150,10 +152,35 @@ import ObligacionesPendientes from './ObligacionesPendientes.vue';
 
     function getServicios() {
         if(pago) {
-            return pago.servicios.map(serv => {
+            const servicios = pago.servicios.map(serv => {
                 const pivote = serv.pivot
                 return {
                     ...serv,
+                    cantidad: pivote.cantidad,
+                    monto_descuento: pivote.monto_descuento,
+                    total_descuento: pivote.total_descuento,
+                    subtotal: pivote.subtotal
+                }
+            })
+            if(!editable) {
+                servicios.push(...getObligaciones())
+            }
+            return servicios
+        }
+        return []
+    }
+
+    function getObligaciones() {
+        if(pago) {
+            return pago.obligaciones.map(ob => {
+                const pivote = ob.pivot
+                const bien = ob.bien
+                const tipo_ob = ob.obligacion_tipo_bien
+                return {
+                    ...ob,
+                    nombre: `${tipo_ob?.nombre} (${bien?.nombre})`,
+                    precio: tipo_ob?.precio,
+                    esObligacion: true,
                     cantidad: pivote.cantidad,
                     monto_descuento: pivote.monto_descuento,
                     total_descuento: pivote.total_descuento,

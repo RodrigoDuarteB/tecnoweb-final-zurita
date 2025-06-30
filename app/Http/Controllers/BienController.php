@@ -6,7 +6,9 @@ use App\Http\Requests\BienStoreRequest;
 use App\Http\Requests\BienUpdateRequest;
 use App\Models\Bien;
 use App\Models\TipoBien;
+use Carbon\Carbon;
 use Inertia\Inertia;
+use InvalidArgumentException;
 
 class BienController extends Controller
 {
@@ -40,16 +42,41 @@ class BienController extends Controller
      */
     public function store(BienStoreRequest $request)
     {
-        Bien::create([
+        $bien = Bien::create([
             ...$request->all(),
             'cliente_id' => $request->user()->cliente->id,
             'valor_referencial' => round($request->valor_referencial, 2)
         ]);
+        $this->generarObligaciones($bien);
         session()->flash('jetstream.flash', [
             'banner' => 'Bien creado corretamente!',
             'bannerStyle' => 'success'
         ]);
         return redirect()->route('bien.index');
+    }
+
+    private function generarObligaciones(Bien $bien) {
+        $tiposObligacion = $bien->tipoBien->obligaciones;
+        foreach($tiposObligacion as $tipoObligacion) {
+            $bien->obligaciones()->create([
+                'obligacion_tipo_bien_id' => $tipoObligacion->id,
+                'fecha_vencimiento' => $this->calcularFechaLimitePago($tipoObligacion->frecuencia)
+            ]);
+        }
+    }
+
+    private function calcularFechaLimitePago(string $frecuencia): Carbon {
+        $fecha = Carbon::now();
+
+        return match ($frecuencia) {
+            'Diaria'    => $fecha->copy()->addDay(),
+            'Semanal'   => $fecha->copy()->addWeek(),
+            'Quincenal' => $fecha->copy()->addDays(15),
+            'Mensual'   => $fecha->copy()->addMonth(),
+            'Anual'     => $fecha->copy()->addYear(),
+            'UnaVez'    => $fecha->copy(), // No se mueve
+            default     => throw new InvalidArgumentException("Frecuencia no válida: $frecuencia"),
+        };
     }
 
     /**

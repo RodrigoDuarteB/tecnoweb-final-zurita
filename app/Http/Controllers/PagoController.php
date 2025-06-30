@@ -104,7 +104,12 @@ class PagoController extends Controller
      */
     public function show(Pago $pago)
     {
-        $pago->load('servicios');
+        $pago->load([
+            'servicios',
+            'obligaciones' => function($query) {
+                $query->with(['bien', 'obligacionTipoBien']);
+            }
+        ]);
         $esVer = true;
         return Inertia::render('Pago/Create', compact('pago', 'esVer'));
     }
@@ -121,7 +126,12 @@ class PagoController extends Controller
             ]);
             return redirect()->route('pago.index');
         }
-        $pago->load('servicios');
+        $pago->load([
+            'servicios',
+            'obligaciones' => function($query) {
+                $query->with(['bien', 'obligacionTipoBien']);
+            }
+        ]);
         $esConfirmar = true;
         return Inertia::render('Pago/Create', compact('pago', 'esConfirmar'));
     }
@@ -138,6 +148,9 @@ class PagoController extends Controller
                 'estado' => 'Confirmado',
                 'fecha_hora_confirmacion' => Carbon::now()
             ]);
+            $pago->obligaciones()->update([
+                'estado' => 'Pagada'
+            ]);
             DB::commit();
             session()->flash('jetstream.flash', [
                 'banner' => 'Pago Confirmado corretamente!',
@@ -146,6 +159,7 @@ class PagoController extends Controller
             return redirect()->route('pago.index');
         } catch (Exception $e) {
             DB::rollBack();
+            dd($e->getMessage(), $e->getTraceAsString());
             session()->flash('jetstream.flash', [
                 'banner' => 'Hubo un error al confirmar el Pago!',
                 'bannerStyle' => 'danger'
@@ -188,7 +202,12 @@ class PagoController extends Controller
             ]);
             return redirect()->route('pago.index');
         }
-        $pago->load('servicios');
+        $pago->load([
+            'servicios',
+            'obligaciones' => function($query) {
+                $query->with(['bien', 'obligacionTipoBien']);
+            }
+        ]);
         return Inertia::render('Pago/Confirmar', compact('pago'));
     }
 }
