@@ -50,7 +50,11 @@ class TipoBienController extends Controller
      */
     public function show(TipoBien $tipoBien)
     {
-        $tipoBien->load('obligaciones');
+        $tipoBien->load([
+            'obligaciones' => function($query) {
+                $query->activos();
+            }
+        ]);
         return Inertia::render('TipoBien/Create', [
             'item' => $tipoBien,
             'esVer' => true
@@ -62,7 +66,11 @@ class TipoBienController extends Controller
      */
     public function edit(TipoBien $tipoBien)
     {
-        $tipoBien->load('obligaciones');
+       $tipoBien->load([
+            'obligaciones' => function($query) {
+                $query->activos();
+            }
+        ]);
         return Inertia::render('TipoBien/Create', [
             'item' => $tipoBien,
         ]);
@@ -73,7 +81,15 @@ class TipoBienController extends Controller
      */
     public function update(TipoBienUpdateRequest $request, TipoBien $tipoBien)
     {
-        $tipoBien->update($request->all());
+        $tipoBien->update([
+            ...$request->all(),
+            'user_id' => auth()->user()->id
+        ]);
+        foreach($request->obligaciones as $obligacion) {
+            $tipoBien->obligaciones()->updateOrCreate([
+                'id' => $obligacion['id']
+            ], $obligacion);
+        }
         session()->flash('jetstream.flash', [
             'banner' => 'Tipo Bien editado corretamente!',
             'bannerStyle' => 'success'

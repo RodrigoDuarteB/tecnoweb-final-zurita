@@ -21,6 +21,7 @@
             <ObligacionesPendientes
                 :items="obligacionesPendientes"
                 @onAdd="addObligation"
+                :servicios="form.servicios"
             />
 
             <div class="flex flex-col mt-2 gap-3">
@@ -181,7 +182,8 @@ import ObligacionesPendientes from './ObligacionesPendientes.vue';
                 porcentaje_descuento: serv.descuento?.porcentaje,
                 subtotal: serv.subtotal,
                 cantidad: serv.cantidad,
-                total_descuento: serv.total_descuento
+                total_descuento: serv.total_descuento,
+                es_obligacion: serv.esObligacion
             }))
         }
     }

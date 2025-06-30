@@ -18,7 +18,7 @@
             <div class="mt-3">
                 <div class="flex gap-2 items-center">
                     <span class="font-semibold text-[1.3rem]">Obligaciones</span>
-                    <PrimaryButton type="button" class="mt-4 ml-2 w-fit" :class="{ 'opacity-25': form.processing }" :disabled="form.processing || disabled" @click="addObligacion">Añadir</PrimaryButton>
+                    <PrimaryButton type="button" class="mt-4 ml-2 w-fit" :class="{ 'opacity-25': form.processing }" :disabled="form.processing" @click="addObligacion" v-if="!disabled">Añadir</PrimaryButton>
                 </div>
                 <ObligacionTipoBienRow
                     v-for="(obligacion, i) in form.obligaciones.filter(el => el.estado == 'Activo')"

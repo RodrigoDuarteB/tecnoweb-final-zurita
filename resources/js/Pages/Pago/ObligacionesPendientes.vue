@@ -56,8 +56,9 @@
                             <PrimaryButton
                                 @click="emits('onAdd', item.id)"
                                 type="button"
+                                :disabled="esAñadido(item.id)"
                             >
-                                Añadir
+                                {{ esAñadido(item.id) ? 'Añadido' : 'Añadir' }}
                             </PrimaryButton>
                         </div>
                     </td>
@@ -84,12 +85,18 @@ import PrimaryButton from '@/Components/PrimaryButton.vue';
 import { ourParseFloat } from '@/utils';
 import { computed } from 'vue'
 
-    const props = defineProps(['items'])
+    const props = defineProps(['items', 'servicios'])
     const emits = defineEmits(['onDelete', 'onAdd'])
     const numberFormat = Intl.NumberFormat('es-BO', {maximumFractionDigits: 2})
     const totalSubtotal = computed(() =>
         props.items.reduce((sum, item) => sum + ourParseFloat(item.subtotal), 0)
     );
+
+    const esAñadido = computed(() => {
+        return (id) => {
+            return !!props.servicios?.find(el => el.id == id)
+        }
+    })
 </script>
 
 <style lang="scss" scoped>

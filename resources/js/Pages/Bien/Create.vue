@@ -23,10 +23,13 @@
                         <TextInput v-model="form.valor_referencial" id="valor_referencial" class="mt-1 block w-full" :disabled="disabled" type="number"/>
                     </div>
 
-                    <div class="w-full">
-                        <InputLabel for="tipo_bien" value="Tipo de Bien"/>
-                        <InputError :message="errors.tipo_bien_id"/>
-                        <Select v-model="form.tipo_bien_id" id="tipo_bien" class="mt-1 block w-full" :disabled="disabled" :items="items" required/>
+                    <div class="flex gap-2 items-center w-full">
+                        <div class="w-full">
+                            <InputLabel for="tipo_bien" value="Tipo de Bien"/>
+                            <InputError :message="errors.tipo_bien_id"/>
+                            <Select v-model="form.tipo_bien_id" id="tipo_bien" class="mt-1 block w-full" :disabled="disabled" :items="items" required/>
+                        </div>
+                        <VerButton v-if="form.tipo_bien_id" :href="route('tipoBien.show', { id: form.tipo_bien_id })" />
                     </div>
                </div>
             </div>
@@ -48,6 +51,7 @@ import PrimaryButton from '@/Components/PrimaryButton.vue';
 import { hideLoading, showLoading } from '@/state';
 import { computed } from 'vue';
 import Select from '@/Components/Select.vue';
+import VerButton from '@/Components/VerButton.vue';
 
     const props = defineProps(['errors', 'item', 'esVer', 'tiposBien']);
     const item = props.item

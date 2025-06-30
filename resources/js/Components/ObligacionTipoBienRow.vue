@@ -20,7 +20,7 @@
             <InputError :message="errors?.nombre"/>
             <TextInput type="number" v-model="item.precio" id="precio" class="mt-1 block w-full" required  :disabled="disabled"/>
         </div>
-        <EliminarButton @click="emit('delete')"/>
+        <EliminarButton @click="emit('delete')" v-show="!disabled"/>
     </div>
     <div class="w-full border-t border-gray-300 my-3" v-if="!isLast"></div>
 </template>
@@ -65,12 +65,6 @@ import EliminarButton from './EliminarButton.vue';
         { label: 'Anual', value: 'Anual' },
         { label: 'UnaVez', value: 'UnaVez' },
     ]
-
-    const actualizarItem = (key: string, value: any) => {
-        // Modificar la prop item aquí
-        const nuevoItem = { ...props.item, [key]: value };
-        emit('update', nuevoItem);
-    };
 </script>
 
 <style lang="scss" scoped>
