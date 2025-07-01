@@ -7,6 +7,7 @@
                     <th class="py-3 px-6 text-center" v-if="es_admin">Cliente</th>
                     <th class="py-3 px-6 text-center">Bien</th>
                     <th class="py-3 px-6 text-center">Obligacion</th>
+                    <th class="py-3 px-6 text-center">Monto</th>
                     <th class="py-3 px-6 text-center">Fecha Vencimiento</th>
                     <th class="py-3 px-6 text-center">Estado</th>
                     <th class="py-3 px-6 text-center">Acciones</th>
@@ -25,6 +26,9 @@
                     </td>
                     <td class="py-3 px-6 text-center whitespace-nowrap">
                         {{ item.obligacion_tipo_bien.nombre}}
+                    </td>
+                    <td class="py-3 px-6 text-center whitespace-nowrap">
+                        {{ numberFormat.format(item.obligacion_tipo_bien.precio) }}
                     </td>
                     <td class="py-3 px-6 text-center whitespace-nowrap">
                         {{ item.fecha_vencimiento }}
@@ -77,6 +81,7 @@ import EditarButton from '@/Components/EditarButton.vue';
 import EliminarButton from '@/Components/EliminarButton.vue';
 import { hideLoading, showLoading } from '@/state';
     const props = defineProps(['items', 'es_admin'])
+    const numberFormat = Intl.NumberFormat('es-BO', {maximumFractionDigits: 2})
 
     const deleteItem = () => {
         if (selectedItem.value) {

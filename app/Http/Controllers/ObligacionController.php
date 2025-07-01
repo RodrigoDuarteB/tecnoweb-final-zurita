@@ -17,7 +17,9 @@ class ObligacionController extends Controller
         $cliente = auth()->user()->cliente;
         $items = Obligacion::with('bien.cliente.usuario', 'obligacionTipoBien');
         if($cliente) {
-            $items = $items->where('cliente_id', $cliente->id);
+            $items =  $items->whereHas('bien', function ($q) use ($cliente) {
+                $q->where('cliente_id', $cliente->id);
+            });
             $es_admin = false;
         }
         $items = $items->get();
@@ -46,7 +48,7 @@ class ObligacionController extends Controller
     public function show(Obligacion $obligacion)
     {
         $obligacion->load('bien.cliente.usuario', 'obligacionTipoBien');
-        return Inertia::render('Bien/Create', [
+        return Inertia::render('Obligacion/Create', [
             'item' => $obligacion,
             'esVer' => true
         ]);

@@ -147,15 +147,16 @@ class PagoController extends Controller
                 'estado' => 'Confirmado',
                 'fecha_hora_confirmacion' => Carbon::now()
             ]);
-            $pago->obligaciones()->where('estado', 'Pendiente')
+            $pago->obligaciones()->where('obligacion.estado', 'Pendiente')
             ->update([
                 'estado' => 'Pagada'
             ]);
-            DB::commit();
+
             session()->flash('jetstream.flash', [
                 'banner' => 'Pago Confirmado corretamente!',
                 'bannerStyle' => 'success'
             ]);
+            DB::commit();
             return redirect()->route('pago.index');
         } catch (Exception $e) {
             DB::rollBack();

@@ -4,32 +4,34 @@
             <div class="flex flex-col gap-2">
                 <div class="flex gap-2">
                     <div class="w-full">
-                        <InputLabel for="nombre" value="Nombre"/>
+                        <InputLabel for="nombre" value="Bien"/>
                         <InputError :message="errors.nombre"/>
-                        <TextInput type="text" v-model="form.nombre" id="nombre" class="mt-1 block w-full" required :disabled="disabled"/>
+                        <TextInput type="text" v-model="form.bien" id="nombre" class="mt-1 block w-full" required :disabled="disabled"/>
                     </div>
 
                     <div class="w-full">
-                        <InputLabel for="descripcion" value="Descripción"/>
+                        <InputLabel for="descripcion" value="Obligacion"/>
                         <InputError :message="errors.descripcion"/>
-                        <TextInput v-model="form.descripcion" id="descripcion" class="mt-1 block w-full" :disabled="disabled"/>
+                        <TextInput v-model="form.obligacion" id="descripcion" class="mt-1 block w-full" :disabled="disabled"/>
                     </div>
                 </div>
 
                <div class="flex gap-2">
                     <div class="w-full">
-                        <InputLabel for="valor_referencial" value="Valor Referencial"/>
+                        <InputLabel for="valor_referencial" value="Fecha Vencimiento"/>
                         <InputError :message="errors.valor_referencial"/>
-                        <TextInput v-model="form.valor_referencial" id="valor_referencial" class="mt-1 block w-full" :disabled="disabled" type="number"/>
+                        <TextInput v-model="form.fecha_vencimiento" id="valor_referencial" class="mt-1 block w-full" :disabled="disabled"/>
                     </div>
 
-                    <div class="flex gap-2 items-center w-full">
-                        <div class="w-full">
-                            <InputLabel for="tipo_bien" value="Tipo de Bien"/>
-                            <InputError :message="errors.tipo_bien_id"/>
-                            <Select v-model="form.tipo_bien_id" id="tipo_bien" class="mt-1 block w-full" :disabled="disabled" :items="items" required/>
-                        </div>
-                        <VerButton v-if="form.tipo_bien_id" :href="route('tipoBien.show', { id: form.tipo_bien_id })" />
+                    <div class="w-full">
+                        <InputLabel for="valor_referencial" value="Estado"/>
+                        <InputError :message="errors.valor_referencial"/>
+                        <TextInput v-model="form.estado" id="valor_referencial" class="mt-1 block w-full" :disabled="disabled"/>
+                    </div>
+                    <div class="w-full">
+                        <InputLabel for="valor_referencial" value="Monto"/>
+                        <InputError :message="errors.valor_referencial"/>
+                        <TextInput v-model="form.precio" id="valor_referencial" class="mt-1 block w-full" :disabled="disabled" type="number"/>
                     </div>
                </div>
             </div>
@@ -50,10 +52,8 @@ import TextInput from '@/Components/TextInput.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import { hideLoading, showLoading } from '@/state';
 import { computed } from 'vue';
-import Select from '@/Components/Select.vue';
-import VerButton from '@/Components/VerButton.vue';
 
-    const props = defineProps(['errors', 'item', 'esVer', 'tiposBien']);
+    const props = defineProps(['errors', 'item', 'esVer']);
     const item = props.item
     const disabled = props.esVer ? true : false
 
@@ -64,21 +64,13 @@ import VerButton from '@/Components/VerButton.vue';
         return 'Registrar Obligacion'
     })
 
-    const items = computed(() => {
-        return props.tiposBien?.map((tb) => {
-            return {
-                label: tb.nombre,
-                value: tb.id
-            }
-        })
-    })
-
     const form = useForm({
         id: item?.id ?? null,
-        nombre: item?.nombre ?? '',
-        descripcion: item?.descripcion ?? '',
-        valor_referencial: item?.valor_referencial ?? 0,
-        tipo_bien_id: item?.tipo_bien_id
+        bien: item?.bien?.nombre ?? '',
+        obligacion: item?.obligacion_tipo_bien?.nombre ?? '',
+        fecha_vencimiento: item?.fecha_vencimiento ?? '',
+        precio: item?.obligacion_tipo_bien?.precio ?? 0,
+        estado: item?.estado ?? ''
     });
 
     const submit = () => {

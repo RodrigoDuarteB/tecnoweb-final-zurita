@@ -22,6 +22,7 @@
                     <thead>
                         <tr class="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
                             <th class="py-3 px-6 text-center">Id</th>
+                            <th class="py-3 px-6 text-center">Tipo</th>
                             <th class="py-3 px-6 text-center">Nombre</th>
                             <th class="py-3 px-6 text-center">Cantidad</th>
                             <th class="py-3 px-6 text-center">Costo p/u</th>
@@ -34,6 +35,9 @@
                         <tr class="border-b border-gray-200 hover:bg-gray-100" v-for="(item, index) in form.servicios" :key="item">
                             <td class="py-3 px-6 text-center whitespace-nowrap">
                                 {{ item.id }}
+                            </td>
+                            <td class="py-3 px-6 text-center whitespace-nowrap">
+                                {{ item.esObligacion ? 'Obligación' : 'Servicio' }}
                             </td>
                             <td class="py-3 px-6 text-center whitespace-nowrap">
                                 {{ item.nombre }}
@@ -96,7 +100,8 @@ import { ourParseFloat } from '@/utils';
     const numberFormat = Intl.NumberFormat('es-BO', {maximumFractionDigits: 2})
 
     function getServicios() {
-        return pago.servicios.map(serv => {
+        let servicios = []
+        servicios = pago.servicios.map(serv => {
             const pivote = serv.pivot
             return {
                 ...serv,
@@ -106,6 +111,29 @@ import { ourParseFloat } from '@/utils';
                 subtotal: pivote.subtotal
             }
         })
+        servicios.push(...getObligaciones())
+        return servicios
+    }
+
+    function getObligaciones() {
+        if(pago?.obligaciones) {
+            return pago.obligaciones.map(ob => {
+                const pivote = ob.pivot
+                const bien = ob.bien
+                const tipo_ob = ob.obligacion_tipo_bien
+                return {
+                    ...ob,
+                    nombre: `${tipo_ob?.nombre} (${bien?.nombre})`,
+                    precio: tipo_ob?.precio,
+                    esObligacion: true,
+                    cantidad: pivote.cantidad,
+                    monto_descuento: pivote.monto_descuento,
+                    total_descuento: pivote.total_descuento,
+                    subtotal: pivote.subtotal
+                }
+            })
+        }
+        return []
     }
 
     const form = useForm({

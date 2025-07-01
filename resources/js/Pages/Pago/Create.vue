@@ -143,6 +143,7 @@ import ObligacionesPendientes from './ObligacionesPendientes.vue';
     const pago = props.pago
     const numberFormat = Intl.NumberFormat('es-BO', {maximumFractionDigits: 2})
     const editable = !props.esVer && !props.esConfirmar
+
     function getTitulo() {
         if(pago) {
             return props.esVer ? `Ver Pago ${pago.id}` : `Confirmar Pago ${pago.id}`
