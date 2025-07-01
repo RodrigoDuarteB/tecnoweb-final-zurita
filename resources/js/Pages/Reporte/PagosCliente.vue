@@ -98,7 +98,7 @@ import { ref } from 'vue';
         if(new Date(datos.fecha_fin) < new Date(datos.fecha_inicio)) return alert("La fecha inicio debe ser menor o igual a la fecha fin")
         items.value = null
         showLoading()
-        const url = 'http://mail.tecnoweb.org.bo/inf513/grupo21sa/proyecto2/public/api/reporte/pagosPorCliente'
+        const url = 'https://www.tecnoweb.org.bo/inf513/grupo21sa/proyecto2/public/api/reporte/pagosPorCliente'
         //const url = '/api/reporte/pagosPorCliente'
         axios.get(url, {
             params: datos.data()
