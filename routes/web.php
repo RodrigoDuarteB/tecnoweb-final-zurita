@@ -8,6 +8,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\ConfiguracionController;
 use App\Http\Controllers\DescuentoController;
 use App\Http\Controllers\MenuController;
+use App\Http\Controllers\ObligacionController;
 use App\Http\Controllers\PagoController;
 use App\Http\Controllers\PoliticaController;
 use App\Http\Controllers\ReclamoController;
@@ -44,6 +45,7 @@ Route::middleware([
     Route::resource('pago', PagoController::class);
     Route::resource('tipoBien', TipoBienController::class);
     Route::resource('bien', BienController::class);
+    Route::resource('obligacion', ObligacionController::class);
     Route::get('pago/{pago}/confirmar', [PagoController::class, 'confirmar'])->name('pago.confirmar');
     Route::get('reportes', [ReporteController::class, 'index'])->name('reporte.index');
     Route::get('reporte/pagosPorCliente', [ReporteController::class, 'pagosCliente'])->name('reporte.pagosPorCliente');

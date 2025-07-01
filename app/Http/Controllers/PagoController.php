@@ -147,7 +147,8 @@ class PagoController extends Controller
                 'estado' => 'Confirmado',
                 'fecha_hora_confirmacion' => Carbon::now()
             ]);
-            $pago->obligaciones()->update([
+            $pago->obligaciones()->where('estado', 'Pendiente')
+            ->update([
                 'estado' => 'Pagada'
             ]);
             DB::commit();

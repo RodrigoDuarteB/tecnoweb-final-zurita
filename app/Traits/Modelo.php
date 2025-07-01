@@ -14,7 +14,7 @@ trait Modelo {
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function eliminar() {
-        $this->update(['estado' => 'Inactivo']);
+    public function eliminar($estado = 'Inactivo') {
+        $this->update(['estado' => $estado]);
     }
 }
