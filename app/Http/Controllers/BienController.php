@@ -60,7 +60,6 @@ class BienController extends Controller
             return redirect()->route('bien.index');
         } catch (Exception $e) {
             DB::rollBack();
-            dd($e->getMessage(), $e->getTraceAsString());
             session()->flash('jetstream.flash', [
                 'banner' => 'Hubo un error al crear el Bien!',
                 'bannerStyle' => 'danger'
@@ -91,7 +90,7 @@ class BienController extends Controller
             'Quincenal' => $fecha->copy()->addDays(15),
             'Mensual'   => $fecha->copy()->addMonth(),
             'Anual'     => $fecha->copy()->addYear(),
-            'UnaVez'    => null,
+            'UnaVez'    => $fecha->copy()->endOfMonth(),
             default     => throw new InvalidArgumentException("Frecuencia no válida: $frecuencia"),
         };
     }

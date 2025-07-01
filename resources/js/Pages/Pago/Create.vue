@@ -171,7 +171,7 @@ import ObligacionesPendientes from './ObligacionesPendientes.vue';
     }
 
     function getObligaciones() {
-        if(pago) {
+        if(pago?.obligaciones) {
             return pago.obligaciones.map(ob => {
                 const pivote = ob.pivot
                 const bien = ob.bien
