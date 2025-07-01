@@ -1,20 +1,15 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
 
-    # Redirigir assets y archivos desde public/
-    RewriteCond %{REQUEST_URI} ^/(build|css|js|images|fonts|favicon\.ico|robots\.txt)
+    # Redirige assets estáticos de public/
+    RewriteCond %{REQUEST_URI} ^/(build|favicon\.ico|robots\.txt|images|css|js)
     RewriteRule ^(.*)$ public/$1 [L]
 
-    # Manejar Authorization Header
+    # Maneja Authorization Header
     RewriteCond %{HTTP:Authorization} .
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
 
-    # Eliminar barras finales excepto en carpetas reales
-    RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteCond %{REQUEST_URI} (.+)/$
-    RewriteRule ^ %1 [L,R=301]
-
-    # Enviar todo lo demás a index.php
+    # Redirige todo lo demás a index.php
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
