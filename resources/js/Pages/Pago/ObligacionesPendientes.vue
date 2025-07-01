@@ -9,10 +9,9 @@
                 <tr class="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
                     <th class="py-3 px-6 text-center">Id</th>
                     <th class="py-3 px-6 text-center">Nombre</th>
+                    <th class="py-3 px-6 text-center">Fecha Vencimiento</th>
                     <th class="py-3 px-6 text-center">Cantidad</th>
                     <th class="py-3 px-6 text-center">Costo p/u</th>
-                    <th class="py-3 px-6 text-center">Descuento p/u</th>
-                    <th class="py-3 px-6 text-center">Total Descuento</th>
                     <th class="py-3 px-6 text-center">Subtotal</th>
                     <th class="py-3 px-6 text-center">Acciones</th>
                 </tr>
@@ -24,6 +23,9 @@
                     </td>
                     <td class="py-3 px-6 text-center whitespace-nowrap">
                         {{ item.nombre }}
+                    </td>
+                    <td class="py-3 px-6 text-center whitespace-nowrap">
+                        {{ item.fecha_vencimiento }}
                     </td>
                     <td class="py-3 px-6 whitespace-nowrap">
                         <div v-if="editable" class="flex gap-2 items-center justify-center">
@@ -41,12 +43,6 @@
                     </td>
                     <td class="py-3 px-6 text-center whitespace-nowrap">
                         {{ numberFormat.format(item.precio) }}
-                    </td>
-                    <td class="py-3 px-6 text-center whitespace-nowrap">
-                        {{ item.monto_descuento ? numberFormat.format(item.monto_descuento) : '-' }}
-                    </td>
-                    <td class="py-3 px-6 text-center whitespace-nowrap">
-                        {{ item.total_descuento ? numberFormat.format(item.total_descuento) : '-' }}
                     </td>
                     <td class="py-3 px-6 text-center whitespace-nowrap">
                         {{ numberFormat.format(item.subtotal) }}

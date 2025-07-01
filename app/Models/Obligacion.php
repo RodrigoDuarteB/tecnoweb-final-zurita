@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use App\Traits\Modelo;
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 
 class Obligacion extends Model
@@ -17,6 +19,13 @@ class Obligacion extends Model
         'user_id',
         'estado',
     ];
+
+   protected function fechaVencimiento(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => $value ? Carbon::parse($value)->format('d/m/Y H:i') : null,
+        );
+    }
 
     public function bien()
     {

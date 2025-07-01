@@ -90,7 +90,6 @@ class PagoController extends Controller
             ]);
         } catch (Exception $e) {
             DB::rollBack();
-            dd($e->getMessage(), $e->getTraceAsString());
             session()->flash('jetstream.flash', [
                 'banner' => 'Hubo un error al crear el Pago!',
                 'bannerStyle' => 'danger'
@@ -159,7 +158,6 @@ class PagoController extends Controller
             return redirect()->route('pago.index');
         } catch (Exception $e) {
             DB::rollBack();
-            dd($e->getMessage(), $e->getTraceAsString());
             session()->flash('jetstream.flash', [
                 'banner' => 'Hubo un error al confirmar el Pago!',
                 'bannerStyle' => 'danger'
