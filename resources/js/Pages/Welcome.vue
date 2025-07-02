@@ -46,7 +46,7 @@ defineProps({
 
         <div class="flex justify-center items-center mt-40 gap-10 ml-40">
             <span class="text-white text-[2rem]">Bienvenido al Sistema de Pagos de</span>
-            <img src="images/logo.png" class="bg-white w-[500px]"/>
+            <img src="http://mail.tecnoweb.org.bo/inf513/grupo21sa/proyecto2/public/images/logo.png" class="bg-white w-[500px]"/>
         </div>
     </div>
 </template>
