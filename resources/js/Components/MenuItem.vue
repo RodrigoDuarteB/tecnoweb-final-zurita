@@ -60,6 +60,8 @@ import { getTimeStyles } from '@/utils';
 
     const props = defineProps(['menu'])
 
+    console.log(page.url)
+
     const opened = ref(props.menu.acciones.some(accion => accion.es_menu && accion.url == page.url))
 
     function toggleOpen() {
