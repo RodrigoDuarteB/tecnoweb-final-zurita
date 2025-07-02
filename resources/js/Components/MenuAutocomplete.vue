@@ -20,15 +20,15 @@
                 class="flex flex-col"
             >
                 <span class="bg-gray-500 text-white">{{ item.nombre  }}</span>
-                <NavLink  v-for="(accion, i) in item.acciones" :key="i" class="p-2 hover:bg-gray-200 cursor-pointer border-b border-b-gray-300" :href="`https://www.tecnoweb.org.bo/inf513/grupo21sa/proyecto2/public${accion.url}`">
+                <!-- <NavLink  v-for="(accion, i) in item.acciones" :key="i" class="p-2 hover:bg-gray-200 cursor-pointer border-b border-b-gray-300" :href="`https://www.tecnoweb.org.bo/inf513/grupo21sa/proyecto2/public${accion.url}`">
                     {{ accion.nombre }}
-                </NavLink>
-                <!-- <NavLink
+                </NavLink> -->
+                <NavLink
                     v-for="(accion, i) in item.acciones" :key="i"
                     class="p-2 hover:bg-gray-200 cursor-pointer border-b border-b-gray-300" :href="accion.url"
                 >
                     {{ accion.nombre }}
-                </NavLink> -->
+                </NavLink>
             </div>
             <div v-if="!suggestions.length">No se Encontraron resultados</div>
         </ul>
