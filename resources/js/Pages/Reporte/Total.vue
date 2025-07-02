@@ -62,7 +62,7 @@ import { ref } from 'vue';
         items.value = null
         showLoading()
          /* const url = 'http://mail.tecnoweb.org.bo/inf513/grupo08sa/proyecto2/public/api/reporte/totalPagosYDescuentos' */
-        const url = '/api/reporte/totalPagosYDescuentos'
+        const url = 'https://www.tecnoweb.org.bo/inf513/grupo21sa/proyecto2/public/api/reporte/totalPagosYDescuentos'
         axios.get(url, {
             params: datos.data()
         })

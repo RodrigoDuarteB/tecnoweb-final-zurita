@@ -28,7 +28,7 @@
                 <li class="px-2 py-1 text-white transition-colors duration-150" v-for="(accion, index) in menu.acciones.filter(m => m.es_menu)" :key="index">
                     <!-- :href="`http://mail.tecnoweb.org.bo/inf513/grupo08sa/proyecto2/public${accion.url}`" -->
                     <NavLink
-                        :href="accion.url"
+                        :href="`https://www.tecnoweb.org.bo/inf513/grupo21sa/proyecto2/public${accion.url}`"
                         :class="['w-full px-1 hover:text-gray-800 hover:bg-gray-100 rounded-md', page.url == accion.url ? '!text-gray-800 !bg-gray-100' : '']"
                     >
                         <div class="flex items-center hover:text-gray-800">

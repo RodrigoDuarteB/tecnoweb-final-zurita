@@ -51,7 +51,7 @@ import InputLabel from './InputLabel.vue';
 
             try {
                 /* const url = 'http://mail.tecnoweb.org.bo/inf513/grupo08sa/proyecto2/public/api/servicio/buscar' */
-                const url = '/api/servicio/buscar'
+                const url = 'https://www.tecnoweb.org.bo/inf513/grupo21sa/proyecto2/public/api/servicio/buscar'
                 const response = await axios.get(url, {
                     params: { termino: searchTerm.value },
                     cancelToken: cancelTokenSource.token,
